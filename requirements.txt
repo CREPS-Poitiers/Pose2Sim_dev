@@ -1,0 +1,262 @@
+absl-py==2.1.0
+aiohappyeyeballs==2.4.3
+aiohttp==3.10.10
+aiosignal==1.3.1
+alabaster==0.7.16
+anytree @ file:///home/conda/feedstock_root/build_artifacts/anytree_1720954642922/work
+arrow==1.3.0
+astroid==3.3.5
+asttokens==2.4.1
+astunparse==1.6.3
+async-timeout==4.0.3
+asyncssh==2.18.0
+atomicwrites==1.4.1
+attrs==24.2.0
+audioread==3.0.1
+autopep8==2.0.4
+babel==2.16.0
+backports.tarfile==1.2.0
+beautifulsoup4==4.12.3
+binaryornot==0.4.4
+black==24.10.0
+bleach==6.2.0
+Brotli @ file:///C:/b/abs_3d36mno480/croot/brotli-split_1714483178642/work
+c3d==0.5.2
+certifi @ file:///C:/b/abs_1fw_exq1si/croot/certifi_1725551736618/work/certifi
+cffi==1.17.1
+chardet==5.2.0
+charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
+click==8.1.7
+cloudpickle==3.1.0
+colorama==0.4.6
+coloredlogs==15.0.1
+colorlog==6.8.2
+comm==0.2.2
+contourpy==1.3.0
+cookiecutter==2.6.0
+cryptography==43.0.3
+cycler==0.12.1
+Cython==3.0.11
+debugpy==1.8.7
+decorator==4.4.2
+deffcode==0.2.6
+defusedxml==0.7.1
+Deprecated==1.2.14
+diff-match-patch==20241021
+dill==0.3.9
+docstring-to-markdown==0.15
+docutils==0.21.2
+exceptiongroup==1.2.2
+executing==2.1.0
+fastjsonschema==2.20.0
+ffmpeg==1.4
+ffprobe==0.5
+ffprobe-python==1.0.3
+filelock @ file:///C:/b/abs_f2gie28u58/croot/filelock_1700591233643/work
+filterpy==1.4.5
+flake8==7.1.1
+flatbuffers==24.3.25
+fonttools==4.54.1
+frozenlist==1.5.0
+fsspec==2024.9.0
+gast==0.6.0
+gmpy2 @ file:///C:/ci/gmpy2_1645455782955/work
+google-pasta==0.2.0
+grpcio==1.66.2
+h5py==3.12.1
+humanfriendly==10.0
+idna==3.10
+imageio==2.36.0
+imageio-ffmpeg==0.5.1
+imagesize==1.4.1
+importlib_metadata==8.5.0
+importlib_resources==6.4.5
+inflection==0.5.1
+intervaltree==3.1.0
+ipykernel==6.29.5
+ipython==8.18.1
+isort==5.13.2
+jaraco.classes==3.4.0
+jaraco.context==6.0.1
+jaraco.functools==4.1.0
+jedi==0.19.1
+jellyfish==1.1.0
+Jinja2 @ file:///C:/b/abs_92fccttino/croot/jinja2_1716993447201/work
+joblib==1.4.2
+jsonschema==4.23.0
+jsonschema-specifications==2024.10.1
+jupyter_client==8.6.3
+jupyter_core==5.7.2
+jupyterlab_pygments==0.3.0
+keras==3.6.0
+keyboard==0.13.5
+keyring==25.5.0
+kiwisolver==1.4.7
+lazy_loader==0.4
+libclang==18.1.1
+librosa==0.10.2.post1
+llvmlite==0.43.0
+lxml==4.9.4
+Markdown==3.7
+markdown-it-py==3.0.0
+MarkupSafe @ file:///C:/b/abs_ecfdqh67b_/croot/markupsafe_1704206030535/work
+matplotlib==3.9.2
+matplotlib-inline==0.1.7
+mccabe==0.7.0
+mdurl==0.1.2
+mistune==3.0.2
+mkl-service==2.4.0
+mkl_fft @ file:///C:/b/abs_f55mv94vyg/croot/mkl_fft_1725370278455/work
+mkl_random @ file:///C:/b/abs_21ydbzdu8d/croot/mkl_random_1725370276095/work
+ml-dtypes==0.4.1
+more-itertools==10.5.0
+moviepy==1.0.3
+mpl_interactions==0.24.2
+mpmath @ file:///C:/b/abs_7833jrbiox/croot/mpmath_1690848321154/work
+msgpack==1.1.0
+multidict==6.1.0
+mypy-extensions==1.0.0
+namex==0.0.8
+nbclient==0.10.0
+nbconvert==7.16.4
+nbformat==5.10.4
+nest-asyncio==1.6.0
+networkx @ file:///C:/b/abs_3bxnu56g9d/croot/networkx_1717597507456/work
+numba==0.60.0
+numexpr @ file:///C:/b/abs_afm0oewmmt/croot/numexpr_1683221839116/work
+numpy==1.26.0
+numpydoc==1.8.0
+onnxruntime-gpu==1.19.2
+opencv-contrib-python==4.10.0.84
+opencv-python==4.10.0.84
+opensim==4.5
+openvino==2024.4.0
+openvino-telemetry==2024.1.0
+opt_einsum==3.4.0
+optree==0.13.0
+packaging @ file:///C:/b/abs_c3vlh0z4jw/croot/packaging_1720101866539/work
+pandas==2.2.3
+pandocfilters==1.5.1
+parso==0.8.4
+pathspec==0.12.1
+patsy==0.5.6
+pexpect==4.9.0
+pickleshare==0.7.5
+pillow==10.4.0
+platformdirs==4.3.6
+pluggy==1.5.0
+pooch==1.8.2
+pose2sim==0.10.1
+proglog==0.1.10
+prompt_toolkit==3.0.48
+propcache==0.2.0
+protobuf==4.25.5
+psutil==6.1.0
+ptyprocess==0.7.0
+pure_eval==0.2.3
+py-cpuinfo @ file:///C:/b/abs_9ej7u6shci/croot/py-cpuinfo_1698068121579/work
+pycodestyle==2.12.1
+pycparser==2.22
+pydocstyle==6.3.0
+pyee==12.0.0
+pyflakes==3.2.0
+PyGithub==2.4.0
+Pygments==2.18.0
+PyJWT==2.9.0
+pylint==3.3.1
+pylint-venv==3.0.4
+pyls-spyder==0.4.0
+PyNaCl==1.5.0
+pyparsing==3.1.4
+PyQt5==5.15.11
+PyQt5-Qt5==5.15.2
+PyQt5_sip==12.15.0
+PyQtWebEngine==5.15.7
+PyQtWebEngine-Qt5==5.15.2
+pyreadline3==3.5.4
+PySocks @ file:///C:/ci/pysocks_1605307512533/work
+python-dateutil==2.9.0.post0
+python-ffmpeg==2.0.12
+python-lsp-black==2.0.0
+python-lsp-jsonrpc==1.1.2
+python-lsp-server==1.12.0
+python-slugify==8.0.4
+pytoolconfig==1.3.1
+pytz==2024.2
+pyuca==1.2
+pywin32==308
+pywin32-ctypes==0.2.3
+PyYAML @ file:///C:/b/abs_782o3mbw7z/croot/pyyaml_1698096085010/work
+pyzmq==26.2.0
+QDarkStyle==3.2.3
+qstylizer==0.2.3
+QtAwesome==1.3.1
+qtconsole==5.6.1
+QtPy==2.4.2
+referencing==0.35.1
+requests @ file:///C:/b/abs_9frifg92q2/croot/requests_1721410901096/work
+rich==13.9.1
+rope==1.13.0
+rpds-py==0.21.0
+RTM==0.2.6
+rtmlib==0.0.12
+Rtree==1.3.0
+scikit-learn==1.5.2
+scipy==1.13.1
+screeninfo==0.8.1
+six @ file:///tmp/build/80754af9/six_1644875935023/work
+snowballstemmer==2.2.0
+sortedcontainers==2.4.0
+soundfile==0.12.1
+soupsieve==2.6
+soxr==0.5.0.post1
+Sphinx==7.4.7
+sphinxcontrib-applehelp==2.0.0
+sphinxcontrib-devhelp==2.0.0
+sphinxcontrib-htmlhelp==2.1.0
+sphinxcontrib-jsmath==1.0.1
+sphinxcontrib-qthelp==2.0.0
+sphinxcontrib-serializinghtml==2.0.0
+spyder==6.0.2
+spyder-kernels==3.0.1
+stack-data==0.6.3
+statsmodels==0.14.4
+superqt==0.6.7
+sympy @ file:///C:/b/abs_4e4p71hdj_/croot/sympy_1724938208509/work
+tables @ file:///C:/b/abs_52tcd9b9dp/croot/pytables_1685123233455/work
+tabulate==0.9.0
+tensorboard==2.17.1
+tensorboard-data-server==0.7.2
+tensorflow==2.17.0
+tensorflow-intel==2.17.0
+tensorflow-io-gcs-filesystem==0.31.0
+termcolor==2.4.0
+text-unidecode==1.3
+textdistance==4.6.3
+threadpoolctl==3.5.0
+three-merge==0.1.1
+tinycss2==1.4.0
+toml @ file:///tmp/build/80754af9/toml_1616166611790/work
+tomli==2.0.2
+tomlkit==0.13.2
+torch==2.4.1
+torchaudio==2.4.1
+torchvision==0.19.1
+tornado==6.4.1
+tqdm==4.66.5
+traitlets==5.14.3
+types-python-dateutil==2.9.0.20241003
+typing_extensions @ file:///C:/b/abs_0as9mdbkfl/croot/typing_extensions_1715268906610/work
+tzdata==2024.2
+ujson==5.10.0
+urllib3 @ file:///C:/b/abs_9a_f8h_bn2/croot/urllib3_1727769836930/work
+watchdog==6.0.0
+wcwidth==0.2.13
+webencodings==0.5.1
+Werkzeug==3.0.4
+whatthepatch==1.0.6
+win-inet-pton @ file:///C:/ci/win_inet_pton_1605306162074/work
+wrapt==1.16.0
+yapf==0.40.2
+yarl==1.17.1
+zipp==3.20.2

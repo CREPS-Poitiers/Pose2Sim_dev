@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MokkaModelVisualConfiguration name="RTMmodel_2P" version="1.0">
+    <MarkersList>
+        <Marker label="Hip" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RHip" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RKnee" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RAnkle" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RBigToe" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RSmallToe" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RHeel" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LHip" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LKnee" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LAnkle" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LBigToe" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LSmallToe" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LHeel" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Neck" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Head" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Nose" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RShoulder" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RElbow" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RWrist" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LShoulder" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LElbow" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LWrist" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Hip_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RHip_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RKnee_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RAnkle_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RBigToe_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RSmallToe_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RHeel_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LHip_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LKnee_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LAnkle_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LBigToe_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LSmallToe_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LHeel_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="Neck_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="Head_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="Nose_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RShoulder_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RElbow_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RWrist_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LShoulder_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LElbow_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LWrist_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="Center_Ball" radius="70" colorR="1" colorG="0.333333" colorB="0" visible="1" trajectory="1"/>
+    </MarkersList>
+    <SegmentsList>
+        <Segment label="Rfoot" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RAnkle"/>
+            <Point label="RBigToe"/>
+            <Point label="RSmallToe"/>
+            <Point label="RHeel"/>
+            <Link pt1="RAnkle" pt2="RHeel"/>
+            <Link pt1="RAnkle" pt2="RBigToe"/>
+            <Link pt1="RAnkle" pt2="RSmallToe"/>
+            <Link pt1="RBigToe" pt2="RHeel"/>
+            <Link pt1="RBigToe" pt2="RSmallToe"/>
+            <Link pt1="RHeel" pt2="RSmallToe"/>
+        </Segment>
+        <Segment label="Lfoot" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LAnkle"/>
+            <Point label="LBigToe"/>
+            <Point label="LSmallToe"/>
+            <Point label="LHeel"/>
+            <Link pt1="LAnkle" pt2="LBigToe"/>
+            <Link pt1="LAnkle" pt2="LHeel"/>
+            <Link pt1="LAnkle" pt2="LSmallToe"/>
+            <Link pt1="LBigToe" pt2="LHeel"/>
+            <Link pt1="LBigToe" pt2="LSmallToe"/>
+            <Link pt1="LHeel" pt2="LSmallToe"/>
+        </Segment>
+        <Segment label="Rleg" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RKnee"/>
+            <Point label="RAnkle"/>
+            <Link pt1="RAnkle" pt2="RKnee"/>
+        </Segment>
+        <Segment label="Lleg" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LKnee"/>
+            <Point label="LAnkle"/>
+            <Link pt1="LAnkle" pt2="LKnee"/>
+        </Segment>
+        <Segment label="Rthigh" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RHip"/>
+            <Point label="RKnee"/>
+            <Link pt1="RHip" pt2="RKnee"/>
+        </Segment>
+        <Segment label="Lthigh" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LHip"/>
+            <Point label="LKnee"/>
+            <Link pt1="LHip" pt2="LKnee"/>
+        </Segment>
+        <Segment label="pelvis" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Hip"/>
+            <Point label="RHip"/>
+            <Point label="LHip"/>
+            <Link pt1="Hip" pt2="LHip"/>
+            <Link pt1="Hip" pt2="RHip"/>
+            <Link pt1="LHip" pt2="RHip"/>
+        </Segment>
+        <Segment label="Trunk" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Hip"/>
+            <Point label="RHip"/>
+            <Point label="LHip"/>
+            <Point label="Neck"/>
+            <Link pt1="Hip" pt2="Neck"/>
+            <Link pt1="Hip" pt2="RHip"/>
+            <Link pt1="Hip" pt2="LHip"/>
+            <Link pt1="LHip" pt2="Neck"/>
+            <Link pt1="LHip" pt2="RHip"/>
+            <Link pt1="Neck" pt2="RHip"/>
+        </Segment>
+        <Segment label="Head" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck"/>
+            <Point label="Head"/>
+            <Point label="Nose"/>
+            <Link pt1="Head" pt2="Neck"/>
+            <Link pt1="Head" pt2="Nose"/>
+            <Link pt1="Neck" pt2="Nose"/>
+        </Segment>
+        <Segment label="Rshoulder" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck"/>
+            <Point label="RShoulder"/>
+            <Link pt1="Neck" pt2="RShoulder"/>
+        </Segment>
+        <Segment label="Lshoulder" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck"/>
+            <Point label="LShoulder"/>
+            <Link pt1="LShoulder" pt2="Neck"/>
+        </Segment>
+        <Segment label="Rarm" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RShoulder"/>
+            <Point label="RElbow"/>
+            <Link pt1="RElbow" pt2="RShoulder"/>
+        </Segment>
+        <Segment label="Rforearm" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RElbow"/>
+            <Point label="RWrist"/>
+            <Link pt1="RElbow" pt2="RWrist"/>
+        </Segment>
+        <Segment label="Larm" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LShoulder"/>
+            <Point label="LElbow"/>
+            <Link pt1="LElbow" pt2="LShoulder"/>
+        </Segment>
+        <Segment label="Lforearm" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LElbow"/>
+            <Point label="LWrist"/>
+            <Link pt1="LElbow" pt2="LWrist"/>
+        </Segment>
+        <Segment label="Rfoot_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RAnkle_2"/>
+            <Point label="RBigToe_2"/>
+            <Point label="RSmallToe_2"/>
+            <Point label="RHeel_2"/>
+            <Link pt1="RAnkle_2" pt2="RHeel_2"/>
+            <Link pt1="RAnkle_2" pt2="RBigToe_2"/>
+            <Link pt1="RAnkle_2" pt2="RSmallToe_2"/>
+            <Link pt1="RBigToe_2" pt2="RHeel_2"/>
+            <Link pt1="RBigToe_2" pt2="RSmallToe_2"/>
+            <Link pt1="RHeel_2" pt2="RSmallToe_2"/>
+        </Segment>
+        <Segment label="Lfoot_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LAnkle_2"/>
+            <Point label="LBigToe_2"/>
+            <Point label="LSmallToe_2"/>
+            <Point label="LHeel_2"/>
+            <Link pt1="LAnkle_2" pt2="LBigToe_2"/>
+            <Link pt1="LAnkle_2" pt2="LHeel_2"/>
+            <Link pt1="LAnkle_2" pt2="LSmallToe_2"/>
+            <Link pt1="LBigToe_2" pt2="LHeel_2"/>
+            <Link pt1="LBigToe_2" pt2="LSmallToe_2"/>
+            <Link pt1="LHeel_2" pt2="LSmallToe_2"/>
+        </Segment>
+        <Segment label="Rleg_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RKnee_2"/>
+            <Point label="RAnkle_2"/>
+            <Link pt1="RAnkle_2" pt2="RKnee_2"/>
+        </Segment>
+        <Segment label="Lleg_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LKnee_2"/>
+            <Point label="LAnkle_2"/>
+            <Link pt1="LAnkle_2" pt2="LKnee_2"/>
+        </Segment>
+        <Segment label="Rthigh_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RHip_2"/>
+            <Point label="RKnee_2"/>
+            <Link pt1="RHip_2" pt2="RKnee_2"/>
+        </Segment>
+        <Segment label="Lthigh_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LHip_2"/>
+            <Point label="LKnee_2"/>
+            <Link pt1="LHip_2" pt2="LKnee_2"/>
+        </Segment>
+        <Segment label="pelvis_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Hip_2"/>
+            <Point label="RHip_2"/>
+            <Point label="LHip_2"/>
+            <Link pt1="Hip_2" pt2="LHip_2"/>
+            <Link pt1="Hip_2" pt2="RHip_2"/>
+            <Link pt1="LHip_2" pt2="RHip_2"/>
+        </Segment>
+        <Segment label="Trunk_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Hip_2"/>
+            <Point label="RHip_2"/>
+            <Point label="LHip_2"/>
+            <Point label="Neck_2"/>
+            <Link pt1="Hip_2" pt2="Neck_2"/>
+            <Link pt1="Hip_2" pt2="RHip_2"/>
+            <Link pt1="Hip_2" pt2="LHip_2"/>
+            <Link pt1="LHip_2" pt2="Neck_2"/>
+            <Link pt1="LHip_2" pt2="RHip_2"/>
+            <Link pt1="Neck_2" pt2="RHip_2"/>
+        </Segment>
+        <Segment label="Head_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck"/>
+            <Point label="Head"/>
+            <Point label="Nose"/>
+            <Link pt1="Head_2" pt2="Neck_2"/>
+            <Link pt1="Head_2" pt2="Nose_2"/>
+            <Link pt1="Neck_2" pt2="Nose_2"/>
+        </Segment>
+        <Segment label="Rshoulder_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck_2"/>
+            <Point label="RShoulder_2"/>
+            <Link pt1="Neck_2" pt2="RShoulder_2"/>
+        </Segment>
+        <Segment label="Lshoulder_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck_2"/>
+            <Point label="LShoulder_2"/>
+            <Link pt1="LShoulder_2" pt2="Neck_2"/>
+        </Segment>
+        <Segment label="Rarm_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RShoulder_2"/>
+            <Point label="RElbow_2"/>
+            <Link pt1="RElbow_2" pt2="RShoulder_2"/>
+        </Segment>
+        <Segment label="Rforearm_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RElbow_2"/>
+            <Point label="RWrist_2"/>
+            <Link pt1="RElbow_2" pt2="RWrist_2"/>
+        </Segment>
+        <Segment label="Larm_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LShoulder_2"/>
+            <Point label="LElbow_2"/>
+            <Link pt1="LElbow_2" pt2="LShoulder_2"/>
+        </Segment>
+        <Segment label="Lforearm_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LElbow_2"/>
+            <Point label="LWrist_2"/>
+            <Link pt1="LElbow_2" pt2="LWrist_2"/>
+        </Segment>
+        <Segment label="Head_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck_2"/>
+            <Point label="Head_2"/>
+            <Point label="Nose_2"/>
+            <Link pt1="Head_2" pt2="Neck_2"/>
+            <Link pt1="Head_2" pt2="Nose_2"/>
+            <Link pt1="Neck_2" pt2="Nose_2"/>
+        </Segment>
+    </SegmentsList>
+</MokkaModelVisualConfiguration>

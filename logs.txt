@@ -1,0 +1,33 @@
+
+---------------------------------------------------------------------
+Camera synchronization
+On Friday 04. October 2024, 16:32:21
+Project directory: C:\ProgramData\anaconda3\envs\Pose2Sim\Lib\site-packages\Pose2Sim\Demo_SinglePerson
+---------------------------------------------------------------------
+
+====================
+--------------------
+
+
+4 videos found in folder
+Created directory: videos\audio_files
+
+---------------------------------------------------------------------
+Camera synchronization
+On Friday 04. October 2024, 16:32:41
+Project directory: C:\ProgramData\anaconda3\envs\Pose2Sim\Lib\site-packages\Pose2Sim\Demo_SinglePerson
+---------------------------------------------------------------------
+
+====================
+--------------------
+
+
+Vidéos synchronisées avec succès.
+
+
+--------------------
+Synchronisation des vidéos faites avec succès.
+====================
+
+Synchronization took 00h00m00s.
+

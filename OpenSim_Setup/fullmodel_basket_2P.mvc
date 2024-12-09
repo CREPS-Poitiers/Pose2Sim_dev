@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MokkaModelVisualConfiguration name="fullmodel_basket" version="1.0">
+    <MarkersList>
+        <Marker label="Hip" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RHip" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RKnee" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RAnkle" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RBigToe" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RSmallToe" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RHeel" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LHip" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LKnee" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LAnkle" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LBigToe" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LSmallToe" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LHeel" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Neck" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Head" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Nose" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RShoulder" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RElbow" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="RWrist" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LShoulder" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LElbow" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="LWrist" radius="21" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Hip_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RHip_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RKnee_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RAnkle_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RBigToe_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RSmallToe_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RHeel_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LHip_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LKnee_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LAnkle_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LBigToe_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LSmallToe_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LHeel_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="Neck_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="Head_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="Nose_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RShoulder_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RElbow_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="RWrist_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LShoulder_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LElbow_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="LWrist_2" radius="21" colorR="0" colorG="1" colorB="0.494118" visible="1" trajectory="0"/>
+        <Marker label="Corner_Bas_Gauche" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Corner_Bas_Droit" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Corner_Haut_Gauche" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Corner_Haut_Droit" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Planche_Bas_Gauche" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Planche_Bas_Droit" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Planche_Haut_Gauche" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Planche_Haut_Droit" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Panier_Centre" radius="10" colorR="1" colorG="1" colorB="1" visible="1" trajectory="0"/>
+        <Marker label="Zone_Bas_Gauche" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Zone_Bas_Droit" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Zone_Haut_Gauche" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Zone_Haut_Droit" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Planche_Rectangle_Bas_Gauche" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Planche_Rectangle_Bas_Droit" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Planche_Rectangle_Haut_Gauche" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Planche_Rectangle_Haut_Droit" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Arceau_Point_1" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Arceau_Point_2" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Arceau_Point_3" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Arceau_Point_4" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Arceau_Point_5" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Arceau_Point_6" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Arceau_Point_7" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Arceau_Point_8" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_1" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_2" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_3" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_4" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_5" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_6" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_7" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_8" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_9" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Non_Charge_Point_10" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_1" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_2" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_3" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_4" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_5" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_6" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_7" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_8" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_9" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_10" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_11" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_12" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_13" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_14" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_15" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_16" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_17" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_18" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_19" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Arc_20" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Base_Left" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Three_Point_Base_Right" radius="28" colorR="1" colorG="0.329412" colorB="0" visible="1" trajectory="0"/>
+        <Marker label="Center_Ball" radius="119" colorR="1" colorG="0.333333" colorB="0" visible="1" trajectory="1"/>
+    </MarkersList>
+    <SegmentsList>
+        <Segment label="Rfoot" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RAnkle"/>
+            <Point label="RBigToe"/>
+            <Point label="RSmallToe"/>
+            <Point label="RHeel"/>
+            <Link pt1="RAnkle" pt2="RHeel"/>
+            <Link pt1="RAnkle" pt2="RBigToe"/>
+            <Link pt1="RAnkle" pt2="RSmallToe"/>
+            <Link pt1="RBigToe" pt2="RHeel"/>
+            <Link pt1="RBigToe" pt2="RSmallToe"/>
+            <Link pt1="RHeel" pt2="RSmallToe"/>
+        </Segment>
+        <Segment label="Lfoot" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LAnkle"/>
+            <Point label="LBigToe"/>
+            <Point label="LSmallToe"/>
+            <Point label="LHeel"/>
+            <Link pt1="LAnkle" pt2="LBigToe"/>
+            <Link pt1="LAnkle" pt2="LHeel"/>
+            <Link pt1="LAnkle" pt2="LSmallToe"/>
+            <Link pt1="LBigToe" pt2="LHeel"/>
+            <Link pt1="LBigToe" pt2="LSmallToe"/>
+            <Link pt1="LHeel" pt2="LSmallToe"/>
+        </Segment>
+        <Segment label="Rleg" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RKnee"/>
+            <Point label="RAnkle"/>
+            <Link pt1="RAnkle" pt2="RKnee"/>
+        </Segment>
+        <Segment label="Lleg" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LKnee"/>
+            <Point label="LAnkle"/>
+            <Link pt1="LAnkle" pt2="LKnee"/>
+        </Segment>
+        <Segment label="Rthigh" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RHip"/>
+            <Point label="RKnee"/>
+            <Link pt1="RHip" pt2="RKnee"/>
+        </Segment>
+        <Segment label="Lthigh" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LHip"/>
+            <Point label="LKnee"/>
+            <Link pt1="LHip" pt2="LKnee"/>
+        </Segment>
+        <Segment label="pelvis" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Hip"/>
+            <Point label="RHip"/>
+            <Point label="LHip"/>
+            <Link pt1="Hip" pt2="LHip"/>
+            <Link pt1="Hip" pt2="RHip"/>
+            <Link pt1="LHip" pt2="RHip"/>
+        </Segment>
+        <Segment label="Trunk" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Hip"/>
+            <Point label="RHip"/>
+            <Point label="LHip"/>
+            <Point label="Neck"/>
+            <Link pt1="Hip" pt2="Neck"/>
+            <Link pt1="Hip" pt2="RHip"/>
+            <Link pt1="Hip" pt2="LHip"/>
+            <Link pt1="LHip" pt2="Neck"/>
+            <Link pt1="LHip" pt2="RHip"/>
+            <Link pt1="Neck" pt2="RHip"/>
+        </Segment>
+        <Segment label="Head" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck"/>
+            <Point label="Head"/>
+            <Point label="Nose"/>
+            <Link pt1="Head" pt2="Neck"/>
+            <Link pt1="Head" pt2="Nose"/>
+            <Link pt1="Neck" pt2="Nose"/>
+        </Segment>
+        <Segment label="Rshoulder" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck"/>
+            <Point label="RShoulder"/>
+            <Link pt1="Neck" pt2="RShoulder"/>
+        </Segment>
+        <Segment label="Lshoulder" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck"/>
+            <Point label="LShoulder"/>
+            <Link pt1="LShoulder" pt2="Neck"/>
+        </Segment>
+        <Segment label="Rarm" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RShoulder"/>
+            <Point label="RElbow"/>
+            <Link pt1="RElbow" pt2="RShoulder"/>
+        </Segment>
+        <Segment label="Rforearm" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RElbow"/>
+            <Point label="RWrist"/>
+            <Link pt1="RElbow" pt2="RWrist"/>
+        </Segment>
+        <Segment label="Larm" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LShoulder"/>
+            <Point label="LElbow"/>
+            <Link pt1="LElbow" pt2="LShoulder"/>
+        </Segment>
+        <Segment label="Lforearm" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LElbow"/>
+            <Point label="LWrist"/>
+            <Link pt1="LElbow" pt2="LWrist"/>
+        </Segment>
+        <Segment label="Ligne coté" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Corner_Bas_Gauche"/>
+            <Point label="Corner_Bas_Droit"/>
+            <Link pt1="Corner_Bas_Droit" pt2="Corner_Bas_Gauche"/>
+        </Segment>
+        <Segment label="droit" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Corner_Bas_Droit"/>
+            <Point label="Corner_Haut_Droit"/>
+            <Link pt1="Corner_Bas_Droit" pt2="Corner_Haut_Droit"/>
+        </Segment>
+        <Segment label="fefv" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Corner_Bas_Gauche"/>
+            <Point label="Corner_Haut_Gauche"/>
+            <Link pt1="Corner_Bas_Gauche" pt2="Corner_Haut_Gauche"/>
+        </Segment>
+        <Segment label="fef" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Corner_Haut_Gauche"/>
+            <Point label="Corner_Haut_Droit"/>
+            <Link pt1="Corner_Haut_Droit" pt2="Corner_Haut_Gauche"/>
+        </Segment>
+        <Segment label="efdc" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Zone_Haut_Gauche"/>
+            <Point label="Zone_Haut_Droit"/>
+            <Link pt1="Zone_Haut_Droit" pt2="Zone_Haut_Gauche"/>
+        </Segment>
+        <Segment label="resfadc" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Zone_Bas_Droit"/>
+            <Point label="Zone_Haut_Droit"/>
+            <Link pt1="Zone_Bas_Droit" pt2="Zone_Haut_Droit"/>
+        </Segment>
+        <Segment label="efadc" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Zone_Bas_Gauche"/>
+            <Point label="Zone_Bas_Droit"/>
+            <Link pt1="Zone_Bas_Droit" pt2="Zone_Bas_Gauche"/>
+        </Segment>
+        <Segment label="efadq" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Planche_Bas_Gauche"/>
+            <Point label="Planche_Bas_Droit"/>
+            <Link pt1="Planche_Bas_Droit" pt2="Planche_Bas_Gauche"/>
+        </Segment>
+        <Segment label="efzvd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Planche_Bas_Droit"/>
+            <Point label="Planche_Haut_Droit"/>
+            <Link pt1="Planche_Bas_Droit" pt2="Planche_Haut_Droit"/>
+        </Segment>
+        <Segment label="eafcde" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Planche_Bas_Gauche"/>
+            <Point label="Planche_Haut_Gauche"/>
+            <Link pt1="Planche_Bas_Gauche" pt2="Planche_Haut_Gauche"/>
+        </Segment>
+        <Segment label="efadv" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Planche_Haut_Gauche"/>
+            <Point label="Planche_Haut_Droit"/>
+            <Link pt1="Planche_Haut_Droit" pt2="Planche_Haut_Gauche"/>
+        </Segment>
+        <Segment label="efzvd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Arceau_Point_4"/>
+            <Point label="Arceau_Point_5"/>
+            <Link pt1="Arceau_Point_4" pt2="Arceau_Point_5"/>
+        </Segment>
+        <Segment label="fzvdc" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Arceau_Point_3"/>
+            <Point label="Arceau_Point_4"/>
+            <Link pt1="Arceau_Point_3" pt2="Arceau_Point_4"/>
+        </Segment>
+        <Segment label="zgvdvd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Arceau_Point_2"/>
+            <Point label="Arceau_Point_3"/>
+            <Link pt1="Arceau_Point_2" pt2="Arceau_Point_3"/>
+        </Segment>
+        <Segment label="fezvd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Arceau_Point_1"/>
+            <Point label="Arceau_Point_2"/>
+            <Link pt1="Arceau_Point_1" pt2="Arceau_Point_2"/>
+        </Segment>
+        <Segment label="eadgqv" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Arceau_Point_1"/>
+            <Point label="Arceau_Point_8"/>
+            <Link pt1="Arceau_Point_1" pt2="Arceau_Point_8"/>
+        </Segment>
+        <Segment label="efdcx" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Arceau_Point_7"/>
+            <Point label="Arceau_Point_8"/>
+            <Link pt1="Arceau_Point_7" pt2="Arceau_Point_8"/>
+        </Segment>
+        <Segment label="dS" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Arceau_Point_6"/>
+            <Point label="Arceau_Point_7"/>
+            <Link pt1="Arceau_Point_6" pt2="Arceau_Point_7"/>
+        </Segment>
+        <Segment label="EFDVX" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Arceau_Point_5"/>
+            <Point label="Arceau_Point_6"/>
+            <Link pt1="Arceau_Point_5" pt2="Arceau_Point_6"/>
+        </Segment>
+        <Segment label="EAFC" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Planche_Rectangle_Bas_Gauche"/>
+            <Point label="Planche_Rectangle_Bas_Droit"/>
+            <Link pt1="Planche_Rectangle_Bas_Droit" pt2="Planche_Rectangle_Bas_Gauche"/>
+        </Segment>
+        <Segment label="EFQSVCX" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Planche_Rectangle_Bas_Droit"/>
+            <Point label="Planche_Rectangle_Haut_Droit"/>
+            <Link pt1="Planche_Rectangle_Bas_Droit" pt2="Planche_Rectangle_Haut_Droit"/>
+        </Segment>
+        <Segment label="EFDCX" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Planche_Rectangle_Haut_Gauche"/>
+            <Point label="Planche_Rectangle_Haut_Droit"/>
+            <Link pt1="Planche_Rectangle_Haut_Droit" pt2="Planche_Rectangle_Haut_Gauche"/>
+        </Segment>
+        <Segment label="DECSX" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Planche_Rectangle_Bas_Gauche"/>
+            <Point label="Planche_Rectangle_Haut_Gauche"/>
+            <Link pt1="Planche_Rectangle_Bas_Gauche" pt2="Planche_Rectangle_Haut_Gauche"/>
+        </Segment>
+        <Segment label="EFDC" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_19"/>
+            <Point label="Three_Point_Base_Right"/>
+            <Link pt1="Three_Point_Arc_19" pt2="Three_Point_Base_Right"/>
+        </Segment>
+        <Segment label="FED" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_2"/>
+            <Point label="Three_Point_Base_Left"/>
+            <Link pt1="Three_Point_Arc_2" pt2="Three_Point_Base_Left"/>
+        </Segment>
+        <Segment label="EFADC" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_2"/>
+            <Point label="Three_Point_Arc_3"/>
+            <Link pt1="Three_Point_Arc_2" pt2="Three_Point_Arc_3"/>
+        </Segment>
+        <Segment label="FEDC" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_3"/>
+            <Point label="Three_Point_Arc_4"/>
+            <Link pt1="Three_Point_Arc_3" pt2="Three_Point_Arc_4"/>
+        </Segment>
+        <Segment label="EDC" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_4"/>
+            <Point label="Three_Point_Arc_5"/>
+            <Link pt1="Three_Point_Arc_4" pt2="Three_Point_Arc_5"/>
+        </Segment>
+        <Segment label="EFD" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_5"/>
+            <Point label="Three_Point_Arc_6"/>
+            <Link pt1="Three_Point_Arc_5" pt2="Three_Point_Arc_6"/>
+        </Segment>
+        <Segment label="DCDX" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_6"/>
+            <Point label="Three_Point_Arc_7"/>
+            <Link pt1="Three_Point_Arc_6" pt2="Three_Point_Arc_7"/>
+        </Segment>
+        <Segment label="FEDC" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_7"/>
+            <Point label="Three_Point_Arc_8"/>
+            <Link pt1="Three_Point_Arc_7" pt2="Three_Point_Arc_8"/>
+        </Segment>
+        <Segment label="EFCDX " colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_8"/>
+            <Point label="Three_Point_Arc_9"/>
+            <Link pt1="Three_Point_Arc_8" pt2="Three_Point_Arc_9"/>
+        </Segment>
+        <Segment label="EFDV " colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_9"/>
+            <Point label="Three_Point_Arc_10"/>
+            <Link pt1="Three_Point_Arc_10" pt2="Three_Point_Arc_9"/>
+        </Segment>
+        <Segment label="ZFSCX" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_10"/>
+            <Point label="Three_Point_Arc_11"/>
+            <Link pt1="Three_Point_Arc_10" pt2="Three_Point_Arc_11"/>
+        </Segment>
+        <Segment label="FEDV" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_11"/>
+            <Point label="Three_Point_Arc_12"/>
+            <Link pt1="Three_Point_Arc_11" pt2="Three_Point_Arc_12"/>
+        </Segment>
+        <Segment label="ZFSCX" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_12"/>
+            <Point label="Three_Point_Arc_13"/>
+            <Link pt1="Three_Point_Arc_12" pt2="Three_Point_Arc_13"/>
+        </Segment>
+        <Segment label="FECD" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_13"/>
+            <Point label="Three_Point_Arc_14"/>
+            <Link pt1="Three_Point_Arc_13" pt2="Three_Point_Arc_14"/>
+        </Segment>
+        <Segment label="EFDC" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_14"/>
+            <Point label="Three_Point_Arc_15"/>
+            <Link pt1="Three_Point_Arc_14" pt2="Three_Point_Arc_15"/>
+        </Segment>
+        <Segment label="QXV" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_15"/>
+            <Point label="Three_Point_Arc_16"/>
+            <Link pt1="Three_Point_Arc_15" pt2="Three_Point_Arc_16"/>
+        </Segment>
+        <Segment label="GGG" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_16"/>
+            <Point label="Three_Point_Arc_17"/>
+            <Link pt1="Three_Point_Arc_16" pt2="Three_Point_Arc_17"/>
+        </Segment>
+        <Segment label="EFDQ" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_17"/>
+            <Point label="Three_Point_Arc_18"/>
+            <Link pt1="Three_Point_Arc_17" pt2="Three_Point_Arc_18"/>
+        </Segment>
+        <Segment label="FDV" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="e">
+            <Point label="Three_Point_Arc_18"/>
+            <Point label="Three_Point_Arc_19"/>
+            <Link pt1="Three_Point_Arc_18" pt2="Three_Point_Arc_19"/>
+        </Segment>
+        <Segment label="feqd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_10"/>
+        </Segment>
+        <Segment label="cxc" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_9"/>
+            <Point label="Non_Charge_Point_10"/>
+            <Link pt1="Non_Charge_Point_10" pt2="Non_Charge_Point_9"/>
+        </Segment>
+        <Segment label="fecd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_8"/>
+            <Point label="Non_Charge_Point_9"/>
+            <Link pt1="Non_Charge_Point_8" pt2="Non_Charge_Point_9"/>
+        </Segment>
+        <Segment label="vdd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_7"/>
+            <Point label="Non_Charge_Point_8"/>
+            <Link pt1="Non_Charge_Point_7" pt2="Non_Charge_Point_8"/>
+        </Segment>
+        <Segment label="edf" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_6"/>
+            <Point label="Non_Charge_Point_7"/>
+            <Link pt1="Non_Charge_Point_6" pt2="Non_Charge_Point_7"/>
+        </Segment>
+        <Segment label="efvd " colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_5"/>
+            <Point label="Non_Charge_Point_6"/>
+            <Link pt1="Non_Charge_Point_5" pt2="Non_Charge_Point_6"/>
+        </Segment>
+        <Segment label="eqvfd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_4"/>
+            <Point label="Non_Charge_Point_5"/>
+            <Link pt1="Non_Charge_Point_4" pt2="Non_Charge_Point_5"/>
+        </Segment>
+        <Segment label="fe" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_3"/>
+            <Point label="Non_Charge_Point_4"/>
+            <Link pt1="Non_Charge_Point_3" pt2="Non_Charge_Point_4"/>
+        </Segment>
+        <Segment label="fcd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_2"/>
+            <Point label="Non_Charge_Point_3"/>
+            <Link pt1="Non_Charge_Point_2" pt2="Non_Charge_Point_3"/>
+        </Segment>
+        <Segment label="vd" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Non_Charge_Point_1"/>
+            <Point label="Non_Charge_Point_2"/>
+            <Link pt1="Non_Charge_Point_1" pt2="Non_Charge_Point_2"/>
+        </Segment>
+        <Segment label="Rfoot_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RAnkle_2"/>
+            <Point label="RBigToe_2"/>
+            <Point label="RSmallToe_2"/>
+            <Point label="RHeel_2"/>
+            <Link pt1="RAnkle_2" pt2="RHeel_2"/>
+            <Link pt1="RAnkle_2" pt2="RBigToe_2"/>
+            <Link pt1="RAnkle_2" pt2="RSmallToe_2"/>
+            <Link pt1="RBigToe_2" pt2="RHeel_2"/>
+            <Link pt1="RBigToe_2" pt2="RSmallToe_2"/>
+            <Link pt1="RHeel_2" pt2="RSmallToe_2"/>
+        </Segment>
+        <Segment label="Lfoot_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LAnkle_2"/>
+            <Point label="LBigToe_2"/>
+            <Point label="LSmallToe_2"/>
+            <Point label="LHeel_2"/>
+            <Link pt1="LAnkle_2" pt2="LBigToe_2"/>
+            <Link pt1="LAnkle_2" pt2="LHeel_2"/>
+            <Link pt1="LAnkle_2" pt2="LSmallToe_2"/>
+            <Link pt1="LBigToe_2" pt2="LHeel_2"/>
+            <Link pt1="LBigToe_2" pt2="LSmallToe_2"/>
+            <Link pt1="LHeel_2" pt2="LSmallToe_2"/>
+        </Segment>
+        <Segment label="Rleg_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RKnee_2"/>
+            <Point label="RAnkle_2"/>
+            <Link pt1="RAnkle_2" pt2="RKnee_2"/>
+        </Segment>
+        <Segment label="Lleg_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LKnee_2"/>
+            <Point label="LAnkle_2"/>
+            <Link pt1="LAnkle_2" pt2="LKnee_2"/>
+        </Segment>
+        <Segment label="Rthigh_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RHip_2"/>
+            <Point label="RKnee_2"/>
+            <Link pt1="RHip_2" pt2="RKnee_2"/>
+        </Segment>
+        <Segment label="Lthigh_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LHip_2"/>
+            <Point label="LKnee_2"/>
+            <Link pt1="LHip_2" pt2="LKnee_2"/>
+        </Segment>
+        <Segment label="pelvis_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Hip_2"/>
+            <Point label="RHip_2"/>
+            <Point label="LHip_2"/>
+            <Link pt1="Hip_2" pt2="LHip_2"/>
+            <Link pt1="Hip_2" pt2="RHip_2"/>
+            <Link pt1="LHip_2" pt2="RHip_2"/>
+        </Segment>
+        <Segment label="Trunk_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Hip_2"/>
+            <Point label="RHip_2"/>
+            <Point label="LHip_2"/>
+            <Point label="Neck_2"/>
+            <Link pt1="Hip_2" pt2="Neck_2"/>
+            <Link pt1="Hip_2" pt2="RHip_2"/>
+            <Link pt1="Hip_2" pt2="LHip_2"/>
+            <Link pt1="LHip_2" pt2="Neck_2"/>
+            <Link pt1="LHip_2" pt2="RHip_2"/>
+            <Link pt1="Neck_2" pt2="RHip_2"/>
+        </Segment>
+        <Segment label="Head_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck"/>
+            <Point label="Head"/>
+            <Point label="Nose"/>
+            <Link pt1="Head_2" pt2="Neck_2"/>
+            <Link pt1="Head_2" pt2="Nose_2"/>
+            <Link pt1="Neck_2" pt2="Nose_2"/>
+        </Segment>
+        <Segment label="Rshoulder_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck_2"/>
+            <Point label="RShoulder_2"/>
+            <Link pt1="Neck_2" pt2="RShoulder_2"/>
+        </Segment>
+        <Segment label="Lshoulder_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck_2"/>
+            <Point label="LShoulder_2"/>
+            <Link pt1="LShoulder_2" pt2="Neck_2"/>
+        </Segment>
+        <Segment label="Rarm_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RShoulder_2"/>
+            <Point label="RElbow_2"/>
+            <Link pt1="RElbow_2" pt2="RShoulder_2"/>
+        </Segment>
+        <Segment label="Rforearm_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="RElbow_2"/>
+            <Point label="RWrist_2"/>
+            <Link pt1="RElbow_2" pt2="RWrist_2"/>
+        </Segment>
+        <Segment label="Larm_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LShoulder_2"/>
+            <Point label="LElbow_2"/>
+            <Link pt1="LElbow_2" pt2="LShoulder_2"/>
+        </Segment>
+        <Segment label="Lforearm_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="LElbow_2"/>
+            <Point label="LWrist_2"/>
+            <Link pt1="LElbow_2" pt2="LWrist_2"/>
+        </Segment>
+        <Segment label="Head_2" colorR="1" colorG="1" colorB="1" visible="1" surface="0" description="">
+            <Point label="Neck_2"/>
+            <Point label="Head_2"/>
+            <Point label="Nose_2"/>
+            <Link pt1="Head_2" pt2="Neck_2"/>
+            <Link pt1="Head_2" pt2="Nose_2"/>
+            <Link pt1="Neck_2" pt2="Nose_2"/>
+        </Segment>
+    </SegmentsList>
+</MokkaModelVisualConfiguration>
