@@ -132,7 +132,7 @@ c3d['parameters']['POINT']['RATE']['value'] = [100]  # Frame rate for points
 c3d['parameters']['POINT']['LABELS']['value'] = marker_names
 
 # Prepare marker data
-num_frames_points = 203  # nombre de frames for the points
+num_frames_points = 719  # nombre de frames for the points
 num_markers = len(marker_names)
 points = np.zeros((4, num_markers, num_frames_points))  # (X, Y, Z, Validity)
 for i, pos in enumerate(transformed_positions):
@@ -142,7 +142,7 @@ for i, pos in enumerate(transformed_positions):
 c3d['data']['points'] = points
 
 # Write the data
-output_path = r"C:\ProgramData\Projets_Florian\Videos_Markerless\Manip_3x3_ext_24-10-2024\Manip 2_traitement_new calib\Trial_1\terrain_basket_transformed.c3d"
+output_path = r"C:\ProgramData\Projets_Florian\Videos_Markerless\Manip_3x3_ext_24-10-2024\Manip 1_traitement_new calib\Trial_6\terrain_basket_transformed.c3d"
 c3d.write(output_path)
 
 print(f'Fichier C3D créé avec succès : {output_path}')
