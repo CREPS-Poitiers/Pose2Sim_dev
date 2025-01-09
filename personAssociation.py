@@ -27,6 +27,7 @@ INPUTS:
 
 OUTPUTS: 
 - json files for each camera with only one person of interest
+- csv file with results of each configuration
 '''
 
 

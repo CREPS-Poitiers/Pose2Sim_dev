@@ -1,35 +1,57 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 '''
 ###########################################################################
-## ROBUST TRIANGULATION  OF 2D COORDINATES                               ##
+## ROBUST TRIANGULATION AND PARAMETER OPTIMIZATION OF 2D COORDINATES     ##
 ###########################################################################
 
-This module triangulates 2D json coordinates and builds a .trc file readable 
-by OpenSim.
+This module performs robust triangulation of 2D JSON coordinates to generate 
+a .trc file readable by OpenSim. It includes functionality to test and optimize 
+triangulation parameters, ensuring the best results for specific scenarios.
 
-The triangulation is weighted by the likelihood of each detected 2D keypoint 
-(if they meet the likelihood threshold). If the reprojection error is above a
-threshold, right and left sides are swapped; if it is still above, a camera 
-is removed for this point and this frame, until the threshold is met. If more 
-cameras are removed than a predefined minimum, triangulation is skipped for 
-the point and this frame. In the end, missing values are interpolated.
+### Key Features:
+1. **Weighted Triangulation**:
+   - Triangulation is weighted by the likelihood of each detected 2D keypoint.
+   - Points below a likelihood threshold are excluded.
 
-In case of multiple subjects detection, make sure you first run the 
-personAssociation module. It will then associate people across frames by 
-measuring the frame-by-frame distance between them.
+2. **Reprojection Error Handling**:
+   - If the reprojection error exceeds a threshold, left and right sides are swapped.
+   - If the error persists, cameras are excluded iteratively until the threshold is met.
+   - If too many cameras are excluded, the point is skipped for the frame.
 
-INPUTS: 
-- a calibration file (.toml extension)
-- json files for each camera with only one person of interest
-- a Config.toml file
-- a skeleton model
+3. **Missing Value Interpolation**:
+   - Non-triangulated frames are filled using interpolation for continuity.
 
-OUTPUTS: 
-- a .trc file with 3D coordinates in Y-up system coordinates
+4. **Multi-Person Compatibility**:
+   - If multiple subjects are detected, the `personAssociation` module should 
+     first be run to associate people across frames.
+
+5. **Parameter Optimization (New Feature)**:
+   - Enables testing different triangulation parameters (e.g., reprojection error 
+     threshold, likelihood threshold, minimum cameras).
+   - Results for each set of parameters are stored in a CSV file for analysis.
+   - Facilitates optimization to determine the best parameters for robust triangulation 
+     in complex scenarios.
+
+### INPUTS:
+- A calibration file (.toml extension).
+- JSON files for each camera, containing the detected 2D coordinates for one person.
+- A `Config.toml` file with parameters for triangulation.
+- A skeleton model defining the structure of the keypoints.
+
+### OUTPUTS:
+- A `.trc` file with 3D coordinates in the Y-up system.
+- A CSV file (`parameters_optimisation_triangulation.csv`) with statistics for 
+  each set of tested parameters, including reprojection errors, excluded cameras, 
+  and sequence continuity.
+
+### Usage:
+This script is especially useful for optimizing the triangulation process in cases 
+where high accuracy is required, such as biomechanical analysis or motion tracking 
+in sports and clinical studies.
 '''
+
 
 
 ## INIT
@@ -280,207 +302,154 @@ def retrieve_right_trc_order(trc_paths):
     
     return trc_id
 
-
-
-
-def recap_triangulate(config_dict, error, nb_cams_excluded, keypoints_names, cam_excluded_count, interp_frames, non_interp_frames, trc_path):
+def recap_triangulate(config_dict, error_tot, nb_cams_excluded_tot, keypoints_names, cam_excluded_count, count_nan_frames_per_kpt, average_sequence_lengths_per_kpt, longest_sequence_lengths_per_kpt, interp_frames, non_interp_frames, trc_paths):
     '''
-    Print a message giving statistics on reprojection errors (in pixel and in m)
+    Print a message giving statistics on reprojection errors (in pixel and in meters),
     as well as the number of cameras that had to be excluded to reach threshold 
-    conditions. Also stored in User/logs.txt and parameters_optimisation_triangulation.csv.
+    conditions. Also stores results in User/logs.txt and parameters_optimisation_triangulation.csv.
 
     INPUT:
-    - a Config.toml file
-    - error: dataframe 
-    - nb_cams_excluded: dataframe
-    - keypoints_names: list of strings
+    - config_dict: Configuration dictionary parsed from `Config.toml`.
+    - error_tot: List of DataFrames containing reprojection errors for each person.
+    - nb_cams_excluded_tot: List of DataFrames with excluded camera counts.
+    - keypoints_names: List of keypoint names (strings).
+    - count_nan_frames_per_kpt: List of counts for frames with non-triangulated keypoints.
+    - average_sequence_lengths_per_kpt: List of average sequence lengths per keypoint.
+    - longest_sequence_lengths_per_kpt: List of longest sequence lengths per keypoint.
 
     OUTPUT:
-    - Message in console
-    - CSV file with triangulation optimization parameters
+    - Console logs with reprojection and triangulation statistics.
+    - CSV file with triangulation optimization parameters.
     '''
 
-    # Read config_dict
+    # Read necessary paths and parameters from the config
     project_dir = config_dict.get('project').get('project_dir')
-    # if batch
     session_dir = os.path.realpath(os.path.join(project_dir, '..'))
-    # if single trial
     session_dir = session_dir if 'Config.toml' in os.listdir(session_dir) else os.getcwd()
+
+    # Locate the calibration directory and file
     calib_dir = [os.path.join(session_dir, c) for c in os.listdir(session_dir) if os.path.isdir(os.path.join(session_dir, c)) and 'calib' in c.lower()][0]
-    calib_file = glob.glob(os.path.join(calib_dir, '*.toml'))[0]  # latest calibration file
+    calib_file = glob.glob(os.path.join(calib_dir, '*.toml'))[0]
     calib = toml.load(calib_file)
-    cam_names = np.array([calib[c].get('name') for c in list(calib.keys())])
-    cam_names = cam_names[list(cam_excluded_count[0].keys())]
+
+    # Read pose model and triangulation thresholds
     pose_model = config_dict.get('pose').get('pose_model')
     error_threshold_triangulation = config_dict.get('triangulation').get('reproj_error_threshold_triangulation')
     likelihood_threshold = config_dict.get('triangulation').get('likelihood_threshold_triangulation')
     min_cameras_value = config_dict.get('triangulation').get('min_cameras_for_triangulation')
 
-    # Setup CSV file
+    # Set up the output directory for 3D poses
     if pose_model == "CUSTOM":
-        pose_3d_dir= os.path.join(project_dir, 'pose-3d-custom')
+        pose_3d_dir = os.path.join(project_dir, 'pose-3d-custom')
     else:
         pose_3d_dir = os.path.join(project_dir, 'pose-3d')
-        
-    
     os.makedirs(pose_3d_dir, exist_ok=True)
+
+    # Prepare the CSV file to store results
     csv_file = os.path.join(pose_3d_dir, 'parameters_optimisation_triangulation.csv')
     csv_headers = [
         "Participant", "Keypoint", "Mean Error (px)", "Mean Error (m)",
-        "Excluded Cameras (avg)", "|", "Reprojection Error Threshold (px)",
-        "Likelihood Threshold", "Minimum Cameras for Triangulation"
+        "Excluded Cameras (avg)", "Frames Non-Triangulated",
+        "Non-Triangulated (%)", "Average Seq. Length", "Longest Seq. Length", "|",
+        "Reprojection Error Threshold (px)", "Likelihood Threshold", "Minimum Cameras for Triangulation"
     ]
     if not os.path.exists(csv_file):
+        # Write headers if the file does not exist
         with open(csv_file, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(csv_headers)
 
-    # Recap
+    # Compute calibration matrix and translation for conversion to meters
     calib_cam1 = calib[list(calib.keys())[0]]
-    fm = calib_cam1['matrix'][0][0]
-    Dm = euclidean_distance(calib_cam1['translation'], [0, 0, 0])
+    fm = calib_cam1['matrix'][0][0]  # Focal length
+    Dm = euclidean_distance(calib_cam1['translation'], [0, 0, 0])  # Distance to the origin
 
-    logging.info('')
-    nb_persons_to_detect = len(error)
+    logging.info('')  # Blank line for separation
+    nb_persons_to_detect = len(error_tot)  # Number of participants
+
+    # Loop over each participant
     for n in range(nb_persons_to_detect):
         if nb_persons_to_detect > 1:
-            logging.info(f'\n\nPARTICIPANT {n+1}\n')
-        
+            logging.info(f'\n\nPARTICIPANT {n+1}\n')  # Log participant header
+
+        total_frames = len(error_tot[n])  # Total number of frames in the trial
+
+        # Dictionary to store statistics for all keypoints
+        all_keypoints_stats = {
+            "mean_error_px": [],
+            "mean_error_m": [],
+            "mean_cam_excluded": [],
+            "frames_non_triangulated": [],
+            "non_triangulated_ratio": [],
+            "avg_seq_length": [],
+            "max_seq_length": []
+        }
+
+        # Loop over each keypoint
         for idx, name in enumerate(keypoints_names):
-            mean_error_keypoint_px = np.around(error[n].iloc[:, idx].mean(), decimals=1)
+            # Calculate per-keypoint statistics
+            mean_error_keypoint_px = np.around(error_tot[n].iloc[:, idx].mean(), decimals=1)
             mean_error_keypoint_m = np.around(mean_error_keypoint_px * Dm / fm, decimals=3)
-            mean_cam_excluded_keypoint = np.around(nb_cams_excluded[n].iloc[:, idx].mean(), decimals=2)
-            logging.info(f'Mean reprojection error for {name} is {mean_error_keypoint_px} px (~ {mean_error_keypoint_m} m), reached with {mean_cam_excluded_keypoint} excluded cameras.')
-            
-            # Write to CSV
+            mean_cam_excluded_keypoint = np.around(nb_cams_excluded_tot[n].iloc[:, idx].mean(), decimals=2)
+            frames_non_triangulated = count_nan_frames_per_kpt[n][idx]
+            non_triangulated_ratio = np.around((frames_non_triangulated / total_frames) * 100, decimals=1)
+            avg_seq_length = np.around(average_sequence_lengths_per_kpt[n][idx], decimals=1)
+            max_seq_length = longest_sequence_lengths_per_kpt[n][idx]
+
+            # Store statistics for "All Keypoints" calculation
+            all_keypoints_stats["mean_error_px"].append(mean_error_keypoint_px)
+            all_keypoints_stats["mean_error_m"].append(mean_error_keypoint_m)
+            all_keypoints_stats["mean_cam_excluded"].append(mean_cam_excluded_keypoint)
+            all_keypoints_stats["frames_non_triangulated"].append(frames_non_triangulated)
+            all_keypoints_stats["non_triangulated_ratio"].append(non_triangulated_ratio)
+            all_keypoints_stats["avg_seq_length"].append(avg_seq_length)
+            all_keypoints_stats["max_seq_length"].append(max_seq_length)
+
+            # Log statistics for the current keypoint
+            logging.info(
+                f'Mean reprojection error for {name} is {mean_error_keypoint_px} px (~ {mean_error_keypoint_m} m), '
+                f'reached with {mean_cam_excluded_keypoint} excluded cameras, {frames_non_triangulated} frames non-triangulated ({non_triangulated_ratio}% of trial), '
+                f'average sequence length {avg_seq_length}, longest sequence {max_seq_length}.'
+            )
+
+            # Write statistics to the CSV file
             with open(csv_file, mode='a', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow([
                     f"Participant {n+1}", name, mean_error_keypoint_px, mean_error_keypoint_m,
-                    mean_cam_excluded_keypoint, "|", error_threshold_triangulation, likelihood_threshold, min_cameras_value
+                    mean_cam_excluded_keypoint, frames_non_triangulated, non_triangulated_ratio,
+                    avg_seq_length, max_seq_length, "|", error_threshold_triangulation, likelihood_threshold, min_cameras_value
                 ])
 
-        mean_error_px = np.around(error[n]['mean'].mean(), decimals=1)
-        mean_error_m = np.around(mean_error_px * Dm / fm, decimals=3)
-        mean_cam_excluded = np.around(nb_cams_excluded[n]['mean'].mean(), decimals=2)
+        # Compute overall statistics for "All Keypoints"
+        mean_error_px_all = np.mean(all_keypoints_stats["mean_error_px"])
+        mean_error_m_all = np.mean(all_keypoints_stats["mean_error_m"])
+        mean_cam_excluded_all = np.mean(all_keypoints_stats["mean_cam_excluded"])
+        frames_non_triangulated_all = np.mean(all_keypoints_stats["frames_non_triangulated"])
+        non_triangulated_ratio_all = np.mean(all_keypoints_stats["non_triangulated_ratio"])
+        avg_seq_length_all = np.mean(all_keypoints_stats["avg_seq_length"])
+        max_seq_length_all = np.max(all_keypoints_stats["max_seq_length"])
 
-        logging.info(f'\n--> Mean reprojection error for all points on all frames is {mean_error_px} px, which roughly corresponds to {mean_error_m} m.')
-        logging.info(f'Cameras were excluded if likelihood was below {likelihood_threshold} and if the reprojection error was above {error_threshold_triangulation} px.') 
+        # Log overall statistics
+        logging.info(
+            f'\n--> Mean reprojection error for all points is {mean_error_px_all:.1f} px (~ {mean_error_m_all:.3f} m), '
+            f'{frames_non_triangulated_all:.1f} frames non-triangulated ({non_triangulated_ratio_all:.1f}% of trial), '
+            f'average sequence length {avg_seq_length_all:.1f}, longest sequence {max_seq_length_all}.'
+        )
 
-        # Write summary row to CSV
+        # Write overall statistics to the CSV file
         with open(csv_file, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([
-                f"Participant {n+1}", "All Keypoints", mean_error_px, mean_error_m,
-                mean_cam_excluded, "|", error_threshold_triangulation, likelihood_threshold, min_cameras_value
+                f"Participant {n+1}", "All Keypoints", mean_error_px_all, mean_error_m_all,
+                mean_cam_excluded_all, frames_non_triangulated_all, non_triangulated_ratio_all,
+                avg_seq_length_all, max_seq_length_all, "|", error_threshold_triangulation, likelihood_threshold, min_cameras_value
             ])
 
-    # Add separator line at the end of the CSV
-    with open(csv_file, mode='a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["--------------"] * len(csv_headers))
-
-    logging.info('\n\n')
+    logging.info('\n\n')  # Blank line at the end
 
 
 
-
-
-
-# def recap_triangulate(config_dict, error, nb_cams_excluded, keypoints_names, cam_excluded_count, interp_frames, non_interp_frames, trc_path):
-#     '''
-#     Print a message giving statistics on reprojection errors (in pixel and in m)
-#     as well as the number of cameras that had to be excluded to reach threshold 
-#     conditions. Also stored in User/logs.txt.
-
-#     INPUT:
-#     - a Config.toml file
-#     - error: dataframe 
-#     - nb_cams_excluded: dataframe
-#     - keypoints_names: list of strings
-
-#     OUTPUT:
-#     - Message in console
-#     '''
-
-#     # Read config_dict
-#     project_dir = config_dict.get('project').get('project_dir')
-#     # if batch
-#     session_dir = os.path.realpath(os.path.join(project_dir, '..'))
-#     # if single trial
-#     session_dir = session_dir if 'Config.toml' in os.listdir(session_dir) else os.getcwd()
-#     calib_dir = [os.path.join(session_dir, c) for c in os.listdir(session_dir) if os.path.isdir(os.path.join(session_dir, c)) and  'calib' in c.lower()][0]
-#     calib_file = glob.glob(os.path.join(calib_dir, '*.toml'))[0] # lastly created calibration file
-#     calib = toml.load(calib_file)
-#     cam_names = np.array([calib[c].get('name') for c in list(calib.keys())])
-#     cam_names = cam_names[list(cam_excluded_count[0].keys())]
-#     error_threshold_triangulation = config_dict.get('triangulation').get('reproj_error_threshold_triangulation')
-#     likelihood_threshold = config_dict.get('triangulation').get('likelihood_threshold_triangulation')
-#     show_interp_indices = config_dict.get('triangulation').get('show_interp_indices')
-#     interpolation_kind = config_dict.get('triangulation').get('interpolation')
-#     interp_gap_smaller_than = config_dict.get('triangulation').get('interp_if_gap_smaller_than')
-#     fill_large_gaps_with = config_dict.get('triangulation').get('fill_large_gaps_with')
-#     make_c3d = config_dict.get('triangulation').get('make_c3d')
-#     handle_LR_swap = config_dict.get('triangulation').get('handle_LR_swap')
-#     undistort_points = config_dict.get('triangulation').get('undistort_points')
-    
-#     # Recap
-#     calib_cam1 = calib[list(calib.keys())[0]]
-#     fm = calib_cam1['matrix'][0][0]
-#     Dm = euclidean_distance(calib_cam1['translation'], [0,0,0])
-
-#     logging.info('')
-#     nb_persons_to_detect = len(error)
-#     for n in range(nb_persons_to_detect):
-#         if nb_persons_to_detect > 1:
-#             logging.info(f'\n\nPARTICIPANT {n+1}\n')
-        
-#         for idx, name in enumerate(keypoints_names):
-#             mean_error_keypoint_px = np.around(error[n].iloc[:,idx].mean(), decimals=1) # RMS à la place?
-#             mean_error_keypoint_m = np.around(mean_error_keypoint_px * Dm / fm, decimals=3)
-#             mean_cam_excluded_keypoint = np.around(nb_cams_excluded[n].iloc[:,idx].mean(), decimals=2)
-#             logging.info(f'Mean reprojection error for {name} is {mean_error_keypoint_px} px (~ {mean_error_keypoint_m} m), reached with {mean_cam_excluded_keypoint} excluded cameras. ')
-#             if show_interp_indices:
-#                 if interpolation_kind != 'none':
-#                     if len(list(interp_frames[n][idx])) == 0 and len(list(non_interp_frames[n][idx])) == 0:
-#                         logging.info(f'  No frames needed to be interpolated.')
-#                     if len(list(interp_frames[n][idx]))>0: 
-#                         interp_str = str(interp_frames[n][idx]).replace(":", " to ").replace("'", "").replace("]", "").replace("[", "")
-#                         logging.info(f'  Frames {interp_str} were interpolated.')
-#                     if len(list(non_interp_frames[n][idx]))>0:
-#                         noninterp_str = str(non_interp_frames[n][idx]).replace(":", " to ").replace("'", "").replace("]", "").replace("[", "")
-#                         logging.info(f'  Frames {noninterp_str} were not interpolated.')
-#                 else:
-#                     logging.info(f'  No frames were interpolated because \'interpolation_kind\' was set to none. ')
-        
-#         mean_error_px = np.around(error[n]['mean'].mean(), decimals=1)
-#         mean_error_mm = np.around(mean_error_px * Dm / fm *1000, decimals=1)
-#         mean_cam_excluded = np.around(nb_cams_excluded[n]['mean'].mean(), decimals=2)
-
-#         logging.info(f'\n--> Mean reprojection error for all points on all frames is {mean_error_px} px, which roughly corresponds to {mean_error_mm} mm. ')
-#         logging.info(f'Cameras were excluded if likelihood was below {likelihood_threshold} and if the reprojection error was above {error_threshold_triangulation} px.') 
-#         if interpolation_kind != 'none':
-#             logging.info(f'Gaps were interpolated with {interpolation_kind} method if smaller than {interp_gap_smaller_than} frames. Larger gaps were filled with {["the last valid value" if fill_large_gaps_with == "last_value" else "zeros" if fill_large_gaps_with == "zeros" else "NaNs"][0]}.') 
-#         logging.info(f'In average, {mean_cam_excluded} cameras had to be excluded to reach these thresholds.')
-        
-#         cam_excluded_count[n] = {i: v for i, v in zip(cam_names, cam_excluded_count[n].values())}
-#         cam_excluded_count[n] = {k: v for k, v in sorted(cam_excluded_count[n].items(), key=lambda item: item[1])[::-1]}
-#         str_cam_excluded_count = ''
-#         for i, (k, v) in enumerate(cam_excluded_count[n].items()):
-#             if i ==0:
-#                  str_cam_excluded_count += f'Camera {k} was excluded {int(np.round(v*100))}% of the time, '
-#             elif i == len(cam_excluded_count[n])-1:
-#                 str_cam_excluded_count += f'and Camera {k}: {int(np.round(v*100))}%.'
-#             else:
-#                 str_cam_excluded_count += f'Camera {k}: {int(np.round(v*100))}%, '
-#         logging.info(str_cam_excluded_count)
-#         logging.info(f'\n3D coordinates are stored at {trc_path[n]}.')
-        
-#     logging.info('\n\n')
-#     if make_c3d:
-#         logging.info('All trc files have been converted to c3d.')
-#     logging.info(f'Limb swapping was {"handled" if handle_LR_swap else "not handled"}.')
-#     logging.info(f'Lens distortions were {"taken into account" if undistort_points else "not taken into account"}.')
 
 
 def triangulation_from_best_cameras(config_dict, coords_2D_kpt, coords_2D_kpt_swapped, projection_matrices, calib_params):
@@ -775,6 +744,43 @@ def extract_files_frame_f(json_tracked_files_f, keypoints_ids, nb_persons_to_det
 
     return x_files, y_files, likelihood_files
 
+# Function to calculate the average and maximum length of contiguous sequences in a frame array
+def calculate_sequence_stats(frame_array):
+    """
+    Calculate the average and maximum length of contiguous sequences of frames in a given array.
+
+    INPUT:
+    - frame_array: A numpy array containing frame indices.
+
+    OUTPUT:
+    - mean_length: Average length of contiguous frame sequences.
+    - max_length: Maximum length of any contiguous frame sequence.
+
+    If the input array is empty, the function returns 0 for both the mean and max lengths.
+    """
+
+    # Return 0 for both statistics if the array is empty
+    if len(frame_array) == 0:
+        return 0, 0
+
+    # Calculate differences between consecutive elements to find gaps
+    diffs = np.diff(frame_array)
+
+    # Identify the indices where the difference is not equal to 1 (indicating a break in continuity)
+    breaks = np.where(diffs != 1)[0]
+
+    # Calculate the lengths of contiguous sequences
+    # Use concatenation to account for the start and end of the array
+    sequence_lengths = np.diff(np.concatenate(([-1], breaks, [len(frame_array) - 1])))
+
+    # Calculate the mean length of sequences
+    mean_length = sequence_lengths.mean()
+
+    # Find the maximum sequence length, or return 0 if there are no sequences
+    max_length = sequence_lengths.max() if len(sequence_lengths) > 0 else 0
+
+    return mean_length, max_length
+
 
 def triangulate_all(config_dict):
     '''
@@ -1007,6 +1013,35 @@ def triangulate_all(config_dict):
     # for each person, for each keypoint, frames to interpolate
     zero_nan_frames = [np.where( Q_tot[n].iloc[:,::3].T.eq(0) | ~np.isfinite(Q_tot[n].iloc[:,::3].T) ) for n in range(nb_persons_to_detect)]
     zero_nan_frames_per_kpt = [[zero_nan_frames[n][1][np.where(zero_nan_frames[n][0]==k)[0]] for k in range(keypoints_nb)] for n in range(nb_persons_to_detect)]
+
+    # Variable to count the number of non-triangulated frames for each keypoint
+    # This creates a nested list where each sublist corresponds to a person,
+    # and each element in the sublist represents the count of non-triangulated frames for a specific keypoint.
+    count_nan_frames_per_kpt = [
+        [len(zero_nan_frames_per_kpt[n][k]) for k in range(keypoints_nb)]
+        for n in range(nb_persons_to_detect)
+    ]
+    
+    # Calculate sequence statistics (mean and max lengths) for each keypoint
+    # The function `calculate_sequence_stats` is applied to the list of frames
+    # without NaNs for each keypoint, resulting in stats for every keypoint of each person.
+    sequence_stats_per_kpt = [
+        [calculate_sequence_stats(zero_nan_frames_per_kpt[n][k]) for k in range(keypoints_nb)]
+        for n in range(nb_persons_to_detect)
+    ]
+    
+    # Extract the average sequence lengths for each keypoint
+    # This unpacks the mean length (first element of the stats tuple) for all keypoints.
+    average_sequence_lengths_per_kpt = [
+        [stats[0] for stats in person_stats] for person_stats in sequence_stats_per_kpt
+    ]
+    
+    # Extract the longest sequence lengths for each keypoint
+    # This unpacks the max length (second element of the stats tuple) for all keypoints.
+    longest_sequence_lengths_per_kpt = [
+        [stats[1] for stats in person_stats] for person_stats in sequence_stats_per_kpt
+    ]
+
     non_nan_nb_first_kpt = [frame_nb - len(zero_nan_frames_per_kpt[n][0]) for n in range(nb_persons_to_detect)]
     deleted_person_id = [n for n in range(len(non_nan_nb_first_kpt)) if non_nan_nb_first_kpt[n]<4]
 
@@ -1073,4 +1108,4 @@ def triangulate_all(config_dict):
 
 
     # Recap message
-    recap_triangulate(config_dict, error_tot, nb_cams_excluded_tot, keypoints_names, cam_excluded_count, interp_frames, non_interp_frames, trc_paths)
+    recap_triangulate(config_dict, error_tot, nb_cams_excluded_tot, keypoints_names, cam_excluded_count, count_nan_frames_per_kpt, average_sequence_lengths_per_kpt, longest_sequence_lengths_per_kpt, interp_frames, non_interp_frames, trc_paths)

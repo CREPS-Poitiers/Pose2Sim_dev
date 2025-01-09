@@ -553,30 +553,29 @@ def rewrite_json_files(json_tracked_files_f, json_files_f, proposals, n_cams):
             os.remove(json_tracked_files_f[cam])
 
 
-
-
 def recap_tracking(config_dict, error=0, nb_cams_excluded=0):
     '''
-    Print a message giving statistics on reprojection errors (in pixel and in m)
-    as well as the number of cameras that had to be excluded to reach threshold
-    conditions. Also stored in User/logs.txt and in parameters_optimisation.csv.
+    Summarizes tracking statistics, including reprojection errors (in pixels and mm)
+    and the number of cameras excluded to meet thresholds. Results are logged and 
+    saved in a CSV file.
 
     INPUT:
-    - a Config.toml file
-    - error: dataframe 
-    - nb_cams_excluded: dataframe
+    - config_dict: Configuration dictionary parsed from a `Config.toml` file.
+    - error: Dataframe of reprojection errors.
+    - nb_cams_excluded: Dataframe of the number of excluded cameras.
 
     OUTPUT:
-    - Message in console
-    - CSV file with optimization parameters
+    - Console messages with statistics.
+    - Optimization parameters saved in a CSV file.
     '''
     
-    # Read config_dict
+    # Extract project directory from the configuration
     project_dir = config_dict.get('project').get('project_dir')
-    # if batch
+    # Determine if running in batch or single-trial mode
     session_dir = os.path.realpath(os.path.join(project_dir, '..'))
-    # if single trial
     session_dir = session_dir if 'Config.toml' in os.listdir(session_dir) else os.getcwd()
+
+    # Retrieve additional parameters from the configuration
     multi_person = config_dict.get('project').get('multi_person')
     likelihood_threshold_association = config_dict.get('personAssociation').get('likelihood_threshold_association')
     tracked_keypoint = config_dict.get('personAssociation').get('single_person').get('tracked_keypoint')
@@ -585,47 +584,49 @@ def recap_tracking(config_dict, error=0, nb_cams_excluded=0):
     min_affinity = config_dict.get('personAssociation').get('multi_person').get('min_affinity')
     pose_model = config_dict.get('pose').get('pose_model')
     
+    # Determine calibration directory and latest calibration file
     calib_dir = [os.path.join(session_dir, c) for c in os.listdir(session_dir) if os.path.isdir(os.path.join(session_dir, c)) and 'calib' in c.lower()][0]
-    calib_file = glob.glob(os.path.join(calib_dir, '*.toml'))[0]  # latest calibration file
-    
+    calib_file = glob.glob(os.path.join(calib_dir, '*.toml'))[0]  
+
+    # Determine output directory for tracked pose data
     if pose_model == "CUSTOM":
         poseTracked_dir = os.path.join(project_dir, 'pose-associated-custom')
     else:
         poseTracked_dir = os.path.join(project_dir, 'pose-associated')
     
-    
-    # CSV file setup
+    # Prepare the CSV file for saving optimization parameters
     csv_file = os.path.join(poseTracked_dir, 'parameters_optimisation.csv')
     csv_headers = [
         "Likelihood Threshold", "Reprojection Error Threshold (px)",
         "Tracked Keypoint", "Mean Reprojection Error (px)", 
         "Mean Reprojection Error (mm)", "Mean Cameras Excluded"
     ]
+    # Create the file if it does not already exist
     if not os.path.exists(csv_file):
         with open(csv_file, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(csv_headers)
 
-    # Processing single or multi-person tracking
+    # Process single-person tracking results
     if not multi_person:
         logging.info('\nSingle-person analysis selected.')
-        # Error
+
+        # Calculate mean reprojection error in pixels and millimeters
         mean_error_px = np.around(np.nanmean(error), decimals=1)
-        
         calib = toml.load(calib_file)
         calib_cam1 = calib[list(calib.keys())[0]]
-        fm = calib_cam1['matrix'][0][0]
-        Dm = euclidean_distance(calib_cam1['translation'], [0, 0, 0])
+        fm = calib_cam1['matrix'][0][0]  # Focal length
+        Dm = euclidean_distance(calib_cam1['translation'], [0, 0, 0])  # Camera distance
         mean_error_mm = np.around(mean_error_px * Dm / fm * 1000, decimals=1)
-        
-        # Excluded cameras
+
+        # Calculate the average number of excluded cameras
         mean_cam_off_count = np.around(np.mean(nb_cams_excluded), decimals=2)
 
-        # Recap
-        logging.info(f'\n--> Mean reprojection error for {tracked_keypoint} point on all frames is {mean_error_px} px, which roughly corresponds to {mean_error_mm} mm.')
-        logging.info(f'--> In average, {mean_cam_off_count} cameras had to be excluded to reach the demanded {error_threshold_tracking} px error threshold after excluding points with likelihood below {likelihood_threshold_association}.')
+        # Log tracking statistics
+        logging.info(f'\n--> Mean reprojection error for {tracked_keypoint} point is {mean_error_px} px, roughly {mean_error_mm} mm.')
+        logging.info(f'--> On average, {mean_cam_off_count} cameras were excluded to meet the threshold of {error_threshold_tracking} px, excluding points with likelihood below {likelihood_threshold_association}.')
 
-        # Write to CSV
+        # Save the statistics to the CSV file
         with open(csv_file, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([
@@ -633,12 +634,13 @@ def recap_tracking(config_dict, error=0, nb_cams_excluded=0):
                 tracked_keypoint, mean_error_px, mean_error_mm, mean_cam_off_count
             ])
     
+    # Process multi-person tracking results
     else:
         logging.info('\nMulti-person analysis selected.')
-        logging.info(f'\n--> A person was reconstructed if the lines from cameras to their keypoints intersected within {reconstruction_error_threshold} m and if the calculated affinity stayed below {min_affinity} after excluding points with likelihood below {likelihood_threshold_association}.')
-        logging.info(f'--> Beware that people were sorted across cameras, but not across frames. This will be done in the triangulation stage.')
+        logging.info(f'\n--> Reconstruction conditions: intersection within {reconstruction_error_threshold} m, affinity below {min_affinity}, and likelihood above {likelihood_threshold_association}.')
+        logging.info('--> People are sorted across cameras but not across frames. This will be resolved in the triangulation stage.')
 
-        # Write to CSV for multi-person case (if needed)
+        # Save multi-person parameters to the CSV file
         with open(csv_file, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([
@@ -646,68 +648,10 @@ def recap_tracking(config_dict, error=0, nb_cams_excluded=0):
                 "Multi-person", "N/A", "N/A", "N/A"
             ])
 
-    # Log file directory
-    logging.info(f'\nTracked json files are stored in {os.path.realpath(poseTracked_dir)}.')
+    # Log the directory for the tracked pose files
+    logging.info(f'\nTracked JSON files are stored in {os.path.realpath(poseTracked_dir)}.')
 
 
-
-
-# def recap_tracking(config_dict, error=0, nb_cams_excluded=0):
-#     '''
-#     Print a message giving statistics on reprojection errors (in pixel and in m)
-#     as well as the number of cameras that had to be excluded to reach threshold
-#     conditions. Also stored in User/logs.txt.
-
-#     INPUT:
-#     - a Config.toml file
-#     - error: dataframe 
-#     - nb_cams_excluded: dataframe
-
-#     OUTPUT:
-#     - Message in console
-#     '''
-    
-#     # Read config_dict
-#     project_dir = config_dict.get('project').get('project_dir')
-#     # if batch
-#     session_dir = os.path.realpath(os.path.join(project_dir, '..'))
-#     # if single trial
-#     session_dir = session_dir if 'Config.toml' in os.listdir(session_dir) else os.getcwd()
-#     multi_person = config_dict.get('project').get('multi_person')
-#     likelihood_threshold_association = config_dict.get('personAssociation').get('likelihood_threshold_association')
-#     tracked_keypoint = config_dict.get('personAssociation').get('single_person').get('tracked_keypoint')
-#     error_threshold_tracking = config_dict.get('personAssociation').get('single_person').get('reproj_error_threshold_association')
-#     reconstruction_error_threshold = config_dict.get('personAssociation').get('multi_person').get('reconstruction_error_threshold')
-#     min_affinity = config_dict.get('personAssociation').get('multi_person').get('min_affinity')
-#     poseTracked_dir = os.path.join(project_dir, 'pose-associated')
-#     calib_dir = [os.path.join(session_dir, c) for c in os.listdir(session_dir) if os.path.isdir(os.path.join(session_dir, c)) and  'calib' in c.lower()][0]
-#     calib_file = glob.glob(os.path.join(calib_dir, '*.toml'))[0] # lastly created calibration file
-    
-#     if not multi_person:
-#         logging.info('\nSingle-person analysis selected.')
-#         # Error
-#         mean_error_px = np.around(np.nanmean(error), decimals=1)
-        
-#         calib = toml.load(calib_file)
-#         calib_cam1 = calib[list(calib.keys())[0]]
-#         fm = calib_cam1['matrix'][0][0]
-#         Dm = euclidean_distance(calib_cam1['translation'], [0,0,0])
-#         mean_error_mm = np.around(mean_error_px * Dm / fm * 1000, decimals=1)
-        
-#         # Excluded cameras
-#         mean_cam_off_count = np.around(np.mean(nb_cams_excluded), decimals=2)
-
-#         # Recap
-#         logging.info(f'\n--> Mean reprojection error for {tracked_keypoint} point on all frames is {mean_error_px} px, which roughly corresponds to {mean_error_mm} mm. ')
-#         logging.info(f'--> In average, {mean_cam_off_count} cameras had to be excluded to reach the demanded {error_threshold_tracking} px error threshold after excluding points with likelihood below {likelihood_threshold_association}.')
-    
-#     else:
-#         logging.info('\nMulti-person analysis selected.')
-#         logging.info(f'\n--> A person was reconstructed if the lines from cameras to their keypoints intersected within {reconstruction_error_threshold} m and if the calculated affinity stayed below {min_affinity} after excluding points with likelihood below {likelihood_threshold_association}.')
-#         logging.info(f'--> Beware that people were sorted across cameras, but not across frames. This will be done in the triangulation stage.')
-
-#     logging.info(f'\nTracked json files are stored in {os.path.realpath(poseTracked_dir)}.')
-    
 
 def track_2d_all(config_dict):
     '''

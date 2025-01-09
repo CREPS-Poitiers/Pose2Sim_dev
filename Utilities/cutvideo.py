@@ -10,7 +10,7 @@ import argparse
 
 def play_and_cut_videos_in_folder(folder_path):
     # Récupérer toutes les vidéos du dossier (filtrées par extension)
-    video_files = [f for f in os.listdir(folder_path) if f.lower().endswith('.mp4')]
+    video_files = [f for f in os.listdir(folder_path) if f.lower().endswith('.mov')]
     if not video_files:
         print(f"Aucune video trouvee dans le dossier : {folder_path}")
         return

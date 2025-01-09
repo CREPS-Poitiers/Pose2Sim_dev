@@ -2,33 +2,62 @@
 # -*- coding: utf-8 -*-
 
 
-'''
+"""
 ###########################################################################
-## POSE ESTIMATION                                                       ##
+## HUMAN POSE ESTIMATION SCRIPT (WITH DEEPLABCUT INTEGRATION )           ##
 ###########################################################################
 
-    Estimate pose from a video file or a folder of images and 
-    write the results to JSON files, videos, and/or images.
-    Results can optionally be displayed in real time.
+This script estimates pose from videos or image folders and saves the results 
+in JSON, video, and/or image formats. It supports real-time visualization, 
+various pose models, and customizable modes for inference. 
 
-    Supported models: HALPE_26 (default, body and feet), COCO_133 (body, feet, hands), COCO_17 (body)
-    Supported modes: lightweight, balanced, performance (edit paths at rtmlib/tools/solutions if you 
-    need nother detection or pose models)
+Key Features:
+- **Flexible Model Support**: HALPE_26, COCO_133, COCO_17 are natively supported via RTMLib.
+- **Custom Integration with DeepLabCut (DLC)**:
+  - Directly integrates with DLC for custom models defined in the `Config.toml` file.
+  - Automates environment setup and execution of DLC projects.
+  - Handles pose estimation outputs for seamless processing in Pose2Sim.
+- **Performance Optimization**:
+  - Detection frequency can be customized for faster processing in simple scenarios.
+  - Tracking enables consistent person IDs across frames.
+- **Output Options**:
+  - JSON files in OpenPose format.
+  - Annotated videos and/or images showing detected poses.
 
-    Optionally gives consistent person ID across frames (slower but good for 2D analysis)
-    Optionally runs detection every n frames and inbetween tracks points (faster but less accurate).
+### DeepLabCut Integration ###
+This script includes a newly developed feature for integrating DeepLabCut (DLC):
+- The `deeplabcut_env_path`, `config_DLC_project_path`, and `shuffle_number` are configured 
+  in the `Config.toml` file.
+- Executes DLC pose estimation in a separate environment.
+- Converts DLC outputs for compatibility with Pose2Sim for further analysis.
 
-    If a valid cuda installation is detected, uses the GPU with the ONNXRuntime backend. Otherwise, 
-    uses the CPU with the OpenVINO backend.
+Inputs:
+- A `Config.toml` file defining the parameters for pose estimation and DLC integration.
+- Video files or folders of images from the specified input directory.
 
-    INPUTS:
-    - videos or image folders from the video directory
-    - a Config.toml file
+Outputs:
+- JSON files with detected keypoints and confidence scores.
+- Optionally, annotated videos and/or images showcasing the detected poses.
 
-    OUTPUTS:
-    - JSON files with the detected keypoints and confidence scores in the OpenPose format
-    - Optionally, videos and/or image files with the detected keypoints 
-'''
+Authors:
+- HunMin Kim, David Pagnon
+- Extended by F.Delaplace for DLC integration
+- Copyright 2021, Pose2Sim
+- Licensed under BSD 3-Clause License
+
+Version: 0.9.4
+Maintainer: David Pagnon
+Email: contact@david-pagnon.com
+"""
+## AUTHORSHIP INFORMATION
+__author__ = "HunMin Kim, David Pagnon"
+__copyright__ = "Copyright 2021, Pose2Sim"
+__credits__ = ["HunMin Kim", "David Pagnon"]
+__license__ = "BSD 3-Clause License"
+__version__ = "0.9.4"
+__maintainer__ = "David Pagnon"
+__email__ = "contact@david-pagnon.com"
+__status__ = "Development"
 
 
 ## INIT
@@ -44,17 +73,6 @@ import subprocess
 
 from rtmlib import PoseTracker, Body, Wholebody, BodyWithFeet, draw_skeleton
 from Pose2Sim.common import natural_sort_key
-
-
-## AUTHORSHIP INFORMATION
-__author__ = "HunMin Kim, David Pagnon"
-__copyright__ = "Copyright 2021, Pose2Sim"
-__credits__ = ["HunMin Kim", "David Pagnon"]
-__license__ = "BSD 3-Clause License"
-__version__ = "0.9.4"
-__maintainer__ = "David Pagnon"
-__email__ = "contact@david-pagnon.com"
-__status__ = "Development"
 
 
 ## FUNCTIONS
@@ -300,129 +318,154 @@ def process_images(image_folder_path, vid_img_extension, pose_tracker, tracking,
 
 def rtm_estimator(config_dict):
     '''
-    Estimate pose from a video file or a folder of images and 
-    write the results to JSON files, videos, and/or images.
-    Results can optionally be displayed in real time.
+    Main function to estimate pose from videos or folders of images using the specified pose model.
+    The results can be saved as JSON, videos, or images, and optionally displayed in real-time.
 
-    Supported models: HALPE_26 (default, body and feet), COCO_133 (body, feet, hands), COCO_17 (body)
-    Supported modes: lightweight, balanced, performance (edit paths at rtmlib/tools/solutions if you 
-    need nother detection or pose models)
+    Features:
+    - Flexible support for multiple models (HALPE_26, COCO_133, COCO_17, and custom models via DeepLabCut).
+    - Customizable detection frequency and consistent person tracking across frames.
+    - Integration with DeepLabCut for custom models defined in the `Config.toml` file.
+    - GPU support via ONNXRuntime or fallback to CPU using OpenVINO backend.
+    
+    Inputs:
+    - A configuration dictionary (parsed from a `Config.toml` file).
+    - Video files or image folders.
 
-    Optionally gives consistent person ID across frames (slower but good for 2D analysis)
-    Optionally runs detection every n frames and inbetween tracks points (faster but less accurate).
-
-    If a valid cuda installation is detected, uses the GPU with the ONNXRuntime backend. Otherwise, 
-    uses the CPU with the OpenVINO backend.
-
-    INPUTS:
-    - videos or image folders from the video directory
-    - a Config.toml file
-
-    OUTPUTS:
-    - JSON files with the detected keypoints and confidence scores in the OpenPose format
-    - Optionally, videos and/or image files with the detected keypoints 
+    Outputs:
+    - Pose estimation results saved in JSON format.
+    - Optionally, annotated videos and/or images.
     '''
 
-    # Read config
-    project_dir = config_dict['project']['project_dir']
-    # if batch
-    session_dir = os.path.realpath(os.path.join(project_dir, '..'))
-    # if single trial
-    session_dir = session_dir if 'Config.toml' in os.listdir(session_dir) else os.getcwd()
-    frame_range = config_dict.get('project').get('frame_range')
-    synchronization_type = config_dict.get('synchronization').get('synchronization_type')
-    if synchronization_type=='move':
-        video_dir = os.path.join(project_dir, 'videos_raw')
-    elif synchronization_type=='sound':
-        video_dir = os.path.join(project_dir, 'videos')
-    elif synchronization_type=='manual':
-        video_dir = os.path.join(project_dir, 'videos')
-        
+    # Read the project directory from the configuration file
+    project_dir = config_dict['project']['project_dir']  # Directory containing the project files
     
+    # Determine session directory based on whether it is a batch or single trial
+    session_dir = os.path.realpath(os.path.join(project_dir, '..'))  # For batch processing
+    session_dir = session_dir if 'Config.toml' in os.listdir(session_dir) else os.getcwd()  # For single trial
+
+    # Retrieve frame range and synchronization type from the configuration
+    frame_range = config_dict.get('project').get('frame_range')  # Frame range to process
+    synchronization_type = config_dict.get('synchronization').get('synchronization_type')  # Type of synchronization
+
+    # Set the appropriate video directory based on the synchronization type
+    if synchronization_type == 'move':
+        video_dir = os.path.join(project_dir, 'videos_raw')  # For motion-based synchronization
+    elif synchronization_type in ['sound', 'manual']:
+        video_dir = os.path.join(project_dir, 'videos')  # For sound/manual-based synchronization
+
+    # Define the directory where pose estimation results will be saved
     pose_dir = os.path.join(project_dir, 'pose')
 
-    pose_model = config_dict['pose']['pose_model']
-    mode = config_dict['pose']['mode'] # lightweight, balanced, performance
-    vid_img_extension = config_dict['pose']['vid_img_extension']
+    # Retrieve pose estimation parameters from the configuration file
+    pose_model = config_dict['pose']['pose_model']  # Pose model to use (e.g., HALPE_26, COCO_133, etc.)
+    mode = config_dict['pose']['mode']  # Mode for inference: lightweight, balanced, or performance
+    vid_img_extension = config_dict['pose']['vid_img_extension']  # File extension for videos/images
     
-    output_format = config_dict['pose']['output_format']
-    save_video = True if 'to_video' in config_dict['pose']['save_video'] else False
-    save_images = True if 'to_images' in config_dict['pose']['save_video'] else False
-    display_detection = config_dict['pose']['display_detection']
-    overwrite_pose = config_dict['pose']['overwrite_pose']
+    # Define output settings
+    output_format = config_dict['pose']['output_format']  # Output format (e.g., 'openpose', 'deeplabcut', etc.)
+    save_video = 'to_video' in config_dict['pose']['save_video']  # Whether to save videos with pose estimation
+    save_images = 'to_images' in config_dict['pose']['save_video']  # Whether to save images with pose estimation
+    display_detection = config_dict['pose']['display_detection']  # Display pose estimation in real-time
+    overwrite_pose = config_dict['pose']['overwrite_pose']  # Overwrite existing results if True
 
-    det_frequency = config_dict['pose']['det_frequency']
-    tracking = config_dict['pose']['tracking']
+    # Detection frequency and tracking options
+    det_frequency = config_dict['pose']['det_frequency']  # Run detection every N frames
+    tracking = config_dict['pose']['tracking']  # Enable consistent person ID tracking across frames
 
-    # Determine frame rate
-    video_files = glob.glob(os.path.join(video_dir, '*'+vid_img_extension))
-    frame_rate = config_dict.get('project').get('frame_rate')
-    if frame_rate == 'auto': 
+    # Determine the frame rate for video processing
+    video_files = glob.glob(os.path.join(video_dir, '*' + vid_img_extension))  # Get all video files in the directory
+    frame_rate = config_dict.get('project').get('frame_rate')  # Frame rate from the configuration
+    if frame_rate == 'auto':  # Automatically determine frame rate
         try:
-            cap = cv2.VideoCapture(video_files[0])
+            cap = cv2.VideoCapture(video_files[0])  # Open the first video file
             cap.read()
-            if cap.read()[0] == False:
-                raise
+            if not cap.read()[0]:
+                raise ValueError("Failed to read video file.")
         except:
-            frame_rate = 60    
+            frame_rate = 60  # Default to 60 FPS if auto-detection fails
 
-    # If CUDA is available, use it with ONNXRuntime backend; else use CPU with openvino
+    # Check if CUDA is available and set the appropriate backend
+    # If CUDAExecutionProvider is available, use GPU with ONNXRuntime backend
     if 'CUDAExecutionProvider' in ort.get_available_providers():
         try:
             import torch
-            if torch.cuda.is_available() == True:
+            if torch.cuda.is_available():  # Verify if CUDA is actually accessible
                 device = 'cuda'
                 backend = 'onnxruntime'
                 logging.info(f"\nValid CUDA installation found: using ONNXRuntime backend with GPU.")
         except:
-            pass
+            pass  # Fallback in case of errors during import or detection
+    # If MPSExecutionProvider or CoreMLExecutionProvider is available, use GPU with ONNXRuntime
     elif 'MPSExecutionProvider' in ort.get_available_providers() or 'CoreMLExecutionProvider' in ort.get_available_providers():
         device = 'mps'
         backend = 'onnxruntime'
         logging.info(f"\nValid MPS installation found: using ONNXRuntime backend with GPU.")
+    # If no GPU is available, fallback to CPU with OpenVINO backend
     else:
         device = 'cpu'
         backend = 'openvino'
         logging.info(f"\nNo valid CUDA installation found: using OpenVINO backend with CPU.")
 
-    if det_frequency>1:
+    # Log the detection frequency configuration
+    if det_frequency > 1:
         logging.info(f'Inference run only every {det_frequency} frames. Inbetween, pose estimation tracks previously detected points.')
-    elif det_frequency==1:
+    elif det_frequency == 1:
         logging.info(f'Inference run on every single frame.')
     else:
         raise ValueError(f"Invalid det_frequency: {det_frequency}. Must be an integer greater or equal to 1.")
     
+    # Log tracking option if enabled
     if tracking:
         logging.info(f'Pose estimation will attempt to give consistent person IDs across frames.\n')
         
-        
-    # Select the appropriate model based on the model_type
-    if pose_model.upper() == 'HALPE_26':
+    # Select the appropriate pose model based on the configuration
+    if pose_model.upper() == 'HALPE_26':  # HALPE_26 for body and feet detection
         ModelClass = BodyWithFeet
         logging.info(f"Using HALPE_26 model (body and feet) for pose estimation.")
-    elif pose_model.upper() == 'COCO_133':
+    elif pose_model.upper() == 'COCO_133':  # COCO_133 for body, feet, hands, and face detection
         ModelClass = Wholebody
         logging.info(f"Using COCO_133 model (body, feet, hands, and face) for pose estimation.")
-    elif pose_model.upper() == 'COCO_17':
-        ModelClass = Body # 26 keypoints(halpe26)
+    elif pose_model.upper() == 'COCO_17':  # COCO_17 for body detection only
+        ModelClass = Body
         logging.info(f"Using COCO_17 model (body) for pose estimation.")
-    elif pose_model.upper() == 'CUSTOM':
+    elif pose_model.upper() == 'CUSTOM':  # Custom models like DeepLabCut
         print("Running custom model")
-    else:
+    else:  # Handle invalid model types
         raise ValueError(f"Invalid model_type: {pose_model}. Must be 'HALPE_26', 'COCO_133', or 'COCO_17'. Use another network (MMPose, DeepLabCut, OpenPose, AlphaPose, BlazePose...) and convert the output files if you need another model. See documentation.")
-    logging.info(f'Mode: {mode}.\n')
     
+    # Log the selected mode of operation (e.g., lightweight, balanced, performance)
+    logging.info(f'Mode: {mode}.\n')
+
+    # Print device and backend information for debugging purposes
     print(device, backend)
 
+        
     if pose_model.upper() == 'CUSTOM':
             # Pose2Sim specific operations (if any)
         print("Starting pose estimation with custom deeplabcut...")
+
+        deeplabcut_env_path = config_dict['pose']['deeplabcut_env_path']
+        config_DLC_project_path = config_dict['pose']['config_DLC_project_path']
+        shuffle_number = config_dict['pose']['shuffle_number']
         
-        # Path to the DeepLabcut script
-        dlc_script_path = r"C:\ProgramData\anaconda3\envs\DEEPLABCUT\Lib\site-packages\deeplabcut\deeplabcut_pose2sim.py"  # Adjust path as necessary
-    
+
+
+            # Construire le chemin vers deeplabcut_pose2sim.py
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        dlc_script_path = os.path.join(current_dir, "Utilities", "deeplabcut_pose2sim.py")
+        
+        if not os.path.exists(config_DLC_project_path):
+            raise FileNotFoundError(f"Le fichier de configuration {config_DLC_project_path} est introuvable.")
+        
         # Command to activate DeepLabcut environment and run the script
-        dlc_command = f"conda activate DeepLabcut && python {dlc_script_path}"
+        dlc_command = (
+            f"conda activate DeepLabcut && python {dlc_script_path} "
+            f"--deeplabcut_env_path '{deeplabcut_env_path}' "
+            f"--config_DLC_project_path '{config_DLC_project_path}' "
+            f"--shuffle_number {shuffle_number} "
+            f"--output_folder 'pose-custom' "
+            f"{'--display_detection' if display_detection else ''}"  # Ajouter uniquement si True
+        )
     
             # Execute the command
         print("Switching to DeepLabcut environment and executing the script...")
@@ -442,42 +485,67 @@ def rtm_estimator(config_dict):
         print("Pose estimation completed. Returning to Pose2Sim operations...")
         
     else:
-    
-        # Initialize the pose tracker
+        # Initialize the pose tracker with the selected model class and configuration settings
         pose_tracker = PoseTracker(
-            ModelClass,
-            det_frequency=det_frequency,
-            mode=mode,
-            backend=backend,
-            device=device,
-            tracking=tracking,
-            to_openpose=False)
-    
-    
+            ModelClass,  # The selected model class (e.g., HALPE_26, COCO_133)
+            det_frequency=det_frequency,  # Frequency for running detection
+            mode=mode,  # Mode of operation (lightweight, balanced, performance)
+            backend=backend,  # Backend being used (e.g., ONNXRuntime or OpenVINO)
+            device=device,  # Hardware device being used (e.g., CPU, GPU)
+            tracking=tracking,  # Whether consistent person IDs are assigned across frames
+            to_openpose=False  # Output format flag (not exporting OpenPose format here)
+        )
+
+        # Logging information for pose estimation
         logging.info('\nEstimating pose...')
         try:
+            # Check if pose estimation has already been done by inspecting the `pose` directory
             pose_listdirs_names = next(os.walk(pose_dir))[1]
             os.listdir(os.path.join(pose_dir, pose_listdirs_names[0]))[0]
+            
+            # If `overwrite_pose` is False, skip pose estimation and log the decision
             if not overwrite_pose:
                 logging.info('Skipping pose estimation as it has already been done. Set overwrite_pose to true in Config.toml if you want to run it again.')
             else:
+                # If `overwrite_pose` is True, log that previous results will be overwritten
                 logging.info('Overwriting previous pose estimation. Set overwrite_pose to false in Config.toml if you want to keep the previous results.')
-                raise
-                
+                raise  # Force re-estimation of pose
+
         except:
+            # Retrieve all video files with the specified extension from the video directory
             video_files = glob.glob(os.path.join(video_dir, '*'+vid_img_extension))
-            if not len(video_files) == 0: 
-                # Process video files
+            if not len(video_files) == 0:  # If video files are found
+                # Log the discovery of video files
                 logging.info(f'Found video files with extension {vid_img_extension}.')
-                for video_path in video_files:
-                    pose_tracker.reset()
-                    process_video(video_path, pose_tracker, tracking, output_format, save_video, save_images, display_detection, frame_range)
-    
+                for video_path in video_files:  # Process each video file
+                    pose_tracker.reset()  # Reset the pose tracker for each video
+                    process_video(  # Call the function to process the video
+                        video_path,
+                        pose_tracker,
+                        tracking,
+                        output_format,
+                        save_video,
+                        save_images,
+                        display_detection,
+                        frame_range
+                    )
             else:
-                # Process image folders
+                # If no video files are found, check for image folders instead
                 logging.info(f'Found image folders with extension {vid_img_extension}.')
+                # Identify all subdirectories in the video directory
                 image_folders = [f for f in os.listdir(video_dir) if os.path.isdir(os.path.join(video_dir, f))]
-                for image_folder in image_folders:
-                    pose_tracker.reset()
-                    image_folder_path = os.path.join(video_dir, image_folder)
-                    process_images(image_folder_path, vid_img_extension, pose_tracker, tracking, output_format, frame_rate, save_video, save_images, display_detection, frame_range)
+                for image_folder in image_folders:  # Process each image folder
+                    pose_tracker.reset()  # Reset the pose tracker for each folder
+                    image_folder_path = os.path.join(video_dir, image_folder)  # Construct the folder path
+                    process_images(  # Call the function to process the folder of images
+                        image_folder_path,
+                        vid_img_extension,
+                        pose_tracker,
+                        tracking,
+                        output_format,
+                        frame_rate,
+                        save_video,
+                        save_images,
+                        display_detection,
+                        frame_range
+                    )

@@ -1,0 +1,69 @@
+Vous voici dans le guide d'utilisation de Pose2Sim.
+Première étape : Organisation du dossier de traitement des vidéos.
+Déposez toutes vos vidéos dans un dossier en vrac avec un fichier config.toml.
+
+Avez-vous déjà effectué la calibration intrinsèque des caméras ?
+❌ Calibration intrinsèque non effectuée.
+Déposez toutes vos vidéos de calibration en vrac dans le même dossier.
+
+Lancez un prompt conda et activez votre environnement Pose2Sim :
+```bash
+conda activate Pose2Sim
+```
+
+Allez dans le bon dossier avec :
+```bash
+cd path_to_your_videos
+```
+
+Démarrez un shell Python interactif avec :
+```bash
+ipython
+```
+
+Importez Pose2Sim et exécutez la classification :
+```python
+from Pose2Sim import Pose2Sim
+Pose2Sim.classification()
+```
+
+Votre environnement et votre dossier de traitement sont maintenant configurés. Vous pouvez continuer avec les prochaines étapes.
+=============================================================
+❌ Vous avez choisi de ne pas effectuer de calibration intrinsèque.
+
+❌ Vous avez choisi de ne pas effectuer de calibration extrinsèque.
+
+Assurez-vous que vous avez bien modifié et enregistré le fichier `config.toml` avec les paramètres appropriés.
+Dans le prompt conda déjà actif (vous êtes dans le bon chemin et dans `ipython`), exécutez :
+```python
+from Pose2Sim import Pose2Sim
+Pose2Sim.calibration()
+```
+=============================================================
+Configurez les paramètres pour la synchronisation manuelle :
+Les paramètres de synchronisation manuelle ont été enregistrés automatiquement dans le fichier config.toml.
+Dans le prompt `ipython`, exécutez :
+```python
+from Pose2Sim import Pose2Sim
+Pose2Sim.synchronization()
+```
+=============================================================
+Configurez les paramètres pour la pose estimation :
+Paramètres enregistrés. Mise à jour du fichier de configuration...
+Les paramètres de pose estimation ont été enregistrés automatiquement dans le fichier config.toml.
+Positionnez-vous dans le dossier du trial à traiter avec :
+```bash
+cd path/to/trial
+```
+Dans le prompt `ipython`, exécutez :
+```python
+from Pose2Sim import Pose2Sim
+Pose2Sim.poseEstimation()
+```
+=============================================================
+Configurez les paramètres pour l'association des personnes :
+Configurez les paramètres avec des plages de valeurs :
+Configurez les paramètres pour une seule personne :
+Les paramètres pour une seule personne ont été enregistrés automatiquement dans le fichier config.toml.
+=============================================================
+Votre guide est complet.
