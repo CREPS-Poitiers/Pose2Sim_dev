@@ -497,30 +497,29 @@ def rtm_estimator(config_dict):
         )
 
     
+        import concurrent.futures
+        
         # Logging information for pose estimation
         logging.info('\nEstimating pose...')
         try:
-            # Check if pose estimation has already been done by inspecting the `pose` directory
             pose_listdirs_names = next(os.walk(pose_dir))[1]
             os.listdir(os.path.join(pose_dir, pose_listdirs_names[0]))[0]
             
-            # If `overwrite_pose` is False, skip pose estimation and log the decision
             if not overwrite_pose:
                 logging.info('Skipping pose estimation as it has already been done. Set overwrite_pose to true in Config.toml if you want to run it again.')
             else:
-                # If `overwrite_pose` is True, log that previous results will be overwritten
                 logging.info('Overwriting previous pose estimation. Set overwrite_pose to false in Config.toml if you want to keep the previous results.')
                 raise  # Force re-estimation of pose
-
+        
         except:
-            # Retrieve all video files with the specified extension from the video directory
-            video_files = glob.glob(os.path.join(video_dir, '*'+vid_img_extension))
-            if not len(video_files) == 0:  # If video files are found
-                # Log the discovery of video files
+            video_files = glob.glob(os.path.join(video_dir, '*' + vid_img_extension))
+            if len(video_files) > 0:  # If video files are found
                 logging.info(f'Found video files with extension {vid_img_extension}.')
-                for video_path in video_files:  # Process each video file
-                    pose_tracker.reset()  # Reset the pose tracker for each video
-                    process_video(  # Call the function to process the video
+        
+                # Function to process a single video
+                def process_single_video(video_path):
+                    pose_tracker.reset()
+                    process_video(
                         video_path,
                         pose_tracker,
                         tracking,
@@ -530,6 +529,19 @@ def rtm_estimator(config_dict):
                         display_detection,
                         frame_range
                     )
+        
+                # Use ThreadPoolExecutor for parallel processing
+                with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+                    futures = {executor.submit(process_single_video, video): video for video in video_files}
+                    
+                    for future in concurrent.futures.as_completed(futures):
+                        video_path = futures[future]
+                        try:
+                            future.result()  # Wait for the video processing to complete
+                            logging.info(f"Completed pose estimation for {video_path}.")
+                        except Exception as exc:
+                            logging.error(f"Error processing video {video_path}: {exc}")
+
             else:
                 # If no video files are found, check for image folders instead
                 logging.info(f'Found image folders with extension {vid_img_extension}.')

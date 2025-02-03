@@ -128,9 +128,39 @@ def hide_question():
         radio.pack_forget()
     validate_button.pack_forget()
 
-# Step 1: Classification setup
 def setup_classification():
+    """
+    Demande si l'utilisateur souhaite effectuer la classification.
+    """
     title_label.config(text="Étape 1 : Organisation du dossier de traitement")
+    update_instructions("Souhaitez-vous effectuer la classification des fichiers ?")
+    show_question(
+        "Souhaitez-vous effectuer la classification des fichiers ?",
+        ["Oui", "Non"],
+        handle_classification_decision
+    )
+
+def handle_classification_decision():
+    """
+    Gère la réponse de l'utilisateur concernant la nécessité de faire la classification.
+    """
+    user_response = intrinsic_var.get()
+    if user_response == "Oui":
+        # Passer à la configuration pour vérifier si la calibration intrinsèque est faite
+        update_instructions("Vous avez choisi d'effectuer la classification des fichiers.")
+        ask_intrinsics_status()
+    else:
+        # Passer directement à l'étape suivante
+        update_instructions("Vous avez choisi de ne pas effectuer la classification. Passons à l'étape suivante.")
+        hide_question()
+        validate_button.config(text="Suivant", command=setup_calibration)
+        validate_button.pack(pady=20)
+
+def ask_intrinsics_status():
+    """
+    Demande si l'utilisateur a déjà effectué la calibration intrinsèque.
+    """
+    hide_question()
     update_instructions("Avez-vous déjà effectué la calibration intrinsèque des caméras ?")
     show_question(
         "Avez-vous déjà effectué la calibration intrinsèque des caméras ?",
@@ -139,6 +169,9 @@ def setup_classification():
     )
 
 def handle_classification_response():
+    """
+    Affiche des consignes spécifiques selon l'état de la calibration intrinsèque.
+    """
     user_response = intrinsic_var.get()
     if user_response == "Oui":
         update_instructions("✅ Calibration intrinsèque déjà effectuée.")
@@ -152,6 +185,9 @@ def handle_classification_response():
     setup_classification_environment()
 
 def setup_classification_environment():
+    """
+    Affiche les consignes pour configurer l'environnement et lancer la classification.
+    """
     update_instructions("Lancez un prompt conda et activez votre environnement Pose2Sim :")
     update_instructions("```bash\nconda activate Pose2Sim\n```\n")
     update_instructions("Allez dans le bon dossier avec :")
@@ -164,6 +200,7 @@ def setup_classification_environment():
     update_instructions("=============================================================")
     validate_button.config(text="Suivant", command=setup_calibration)
     validate_button.pack(pady=20)
+
 
 # Step 2: Calibration
 def setup_calibration():
