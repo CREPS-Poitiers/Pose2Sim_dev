@@ -46,6 +46,8 @@ that require combining and reorienting multiple datasets.
 import ezc3d
 import numpy as np
 import os
+import re
+
 
 def rotation_matrix(angles):
     """
@@ -109,39 +111,34 @@ def resolve_duplicate_labels(existing_labels, new_labels):
 
     return updated_labels
 
-
-def get_incremental_c3d_files(folder_path):
+def get_incremental_c3d_files(folder_path, max_participants):
     """
-    Retrieve C3D files with a specific naming pattern incrementally (e.g., P1_filt_butterworth.c3d).
+    Retrieve C3D files with a flexible naming pattern up to a maximum number of participants.
 
     Parameters:
     folder_path (str): Path to the folder containing the C3D files.
+    max_participants (int): Maximum number of participants to consider.
 
     Returns:
-    tuple: A dictionary mapping file identifiers (e.g., 'c3d_file1') to file paths, 
-           and the count of identified files.
+    list: A list of paths to C3D files sorted by participant ID.
     """
-    c3d_files = {}  # Dictionary to store found files
-    i = 1  # Counter for P1, P2, etc.
+    file_pattern = re.compile(r"Trial_\d+_P(\d+)_.*_filt_butterworth\.c3d")  # Match P1, P2, etc.
+    file_list = os.listdir(folder_path)
 
-    while True:
-        # Construct the pattern for P1, P2, etc.
-        pattern = f"P{i}_filt_butterworth.c3d"
-        found = False  # Track if a matching file is found
+    # Filter files matching the pattern and within max_participants
+    matching_files = []
+    for file_name in file_list:
+        match = file_pattern.match(file_name)
+        if match:
+            participant_id = int(match.group(1))
+            if participant_id <= max_participants:
+                matching_files.append(os.path.join(folder_path, file_name))
 
-        # Iterate over files in the folder
-        for file_name in os.listdir(folder_path):
-            if pattern in file_name:  # Check if the pattern matches the file name
-                c3d_files[f"c3d_file{i}"] = os.path.join(folder_path, file_name)
-                found = True
-                break  # Move to the next pattern
+    # Sort files by participant ID
+    matching_files.sort(key=lambda x: int(file_pattern.match(os.path.basename(x)).group(1)))
 
-        if not found:  # If no matching file is found, exit the loop
-            break
+    return matching_files
 
-        i += 1
-
-    return c3d_files, i
 
 
 def extract_from_folder(folder_path):
@@ -166,7 +163,6 @@ def extract_from_folder(folder_path):
 
     # Raise an error if no matching file is found
     raise FileNotFoundError("No matching C3D file found in the folder.")
-
 
 
 
@@ -203,46 +199,48 @@ def combine_and_rotate_c3d(config_dict):
 
     # Define output file path
     output_file = os.path.join(results_dir, 'combined_results.c3d')
-
-    # Multi-person setup
+        
     if multi_person:
+        # Nombre maximum de participants
+        max_participants = config_dict.get('genResults').get('combine').get('max_participants', 2)
+    
+        # Récupération des fichiers participants
+        c3d_files = get_incremental_c3d_files(pose3d_dir, max_participants)
+    
+        # Ajout du fichier "court" si présent
+        court_c3d_path = os.path.join(results_dir, 'sport_court.c3d')
+        if os.path.exists(court_c3d_path):
+            c3d_files.append(court_c3d_path)
+    
+        # Ajout du fichier "custom person" si présent
         if os.path.isdir(pose3d_custom_dir):
-            c3d_files, count = get_incremental_c3d_files(pose3d_dir)  # Retrieve C3D files
-            rotation_angles = [tuple(rotation_person) for _ in range(1, count)]
-            
-            # Add the court C3D file
-            c3d_files[f"c3d_file{count}"] = os.path.join(results_dir, 'sport_court.c3d')
-            rotation_angles.append(tuple(rotation_court))
-            
-            # Add the custom person file
-            c3d_files[f"c3d_file{count + 1}"] = extract_from_folder(pose3d_custom_dir)
-            rotation_angles.append(tuple(rotation_custom))
-        else:
-            c3d_files, count = get_incremental_c3d_files(pose3d_dir)
-            rotation_angles = [tuple(rotation_person) for _ in range(1, count)]
-            
-            # Add the court C3D file
-            c3d_files[f"c3d_file{count}"] = os.path.join(results_dir, 'sport_court.c3d')
-            rotation_angles.append(tuple(rotation_court))
+            custom_person_c3d_path = extract_from_folder(pose3d_custom_dir)
+            c3d_files.append(custom_person_c3d_path)
     else:
+        # Mode single-person
         if os.path.isdir(pose3d_custom_dir):
-            # Extract and store C3D files
             c3d_files = [
                 extract_from_folder(pose3d_dir),
                 os.path.join(results_dir, 'sport_court.c3d'),
                 extract_from_folder(pose3d_custom_dir)
             ]
-            rotation_angles = [tuple(rotation_person), tuple(rotation_court), tuple(rotation_custom)]
         else:
             c3d_files = [
                 extract_from_folder(pose3d_dir),
                 os.path.join(results_dir, 'sport_court.c3d')
             ]
-            rotation_angles = [tuple(rotation_person), tuple(rotation_court)]
-
+    
+    # Initialisation des angles de rotation pour chaque fichier
+    rotation_angles = [tuple(rotation_person)] * (len(c3d_files) - 2)  # Participants
+    if os.path.exists(court_c3d_path):
+        rotation_angles.append(tuple(rotation_court))
+    if os.path.isdir(pose3d_custom_dir):
+        rotation_angles.append(tuple(rotation_custom))
+    
     combined_points = []
     combined_labels = []
-    n_frames = None  # Minimum number of frames across all files
+    n_frames = None  # Minimum number of frames parmi tous les fichiers
+
 
     for i, c3d_file in enumerate(c3d_files):
         if not c3d_file:  # Skip if no file

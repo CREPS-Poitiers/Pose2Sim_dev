@@ -631,118 +631,75 @@ def calib_opencap_fun(files_to_convert_paths, binning_factor=1):
     return ret, C, S, D, K, R, T
 
 
+
 def calib_calc_fun(calib_dir, intrinsics_config_dict, extrinsics_config_dict):
     '''
     Calibrates intrinsic and extrinsic parameters
-    from images or videos of a checkerboard or Charuco board,
-    or retrieves them from an existing calibration file.
+    from images or videos of a checkerboard
+    or retrieve them from a file
 
-    **Inputs:**
-    - `calib_dir`: Directory containing intrinsic and extrinsic folders, each populated with camera directories.
-    - `intrinsics_config_dict`: Dictionary containing intrinsics calibration settings:
-        - `overwrite_intrinsics` (bool): Determines whether to recalculate intrinsic parameters.
-        - `intrinsics_method` (str): Calibration method ('charuco' for ArUco + chessboard, or 'chessboard').
-        - `show_detection_intrinsics` (bool): Whether to display detection during intrinsics calibration.
-        - `intrinsics_extension` (str): File format for input videos/images (e.g., 'mp4', 'jpg').
-        - `extract_every_N_sec` (float): Frame extraction frequency for videos (e.g., 0.2 seconds).
-        - `intrinsics_corners_nb` (list[int]): Number of internal corners [rows, cols] for the board.
-        - `intrinsics_square_size` (float): Square size in mm for calibration patterns.
-        - `intrinsics_aruco_size` (float): Marker size in mm (often 0.75 * square size).
-        - `intrinsics_aruco_dict` (str): ArUco dictionary type (e.g., 'DICT_6X6_250').
-    - `extrinsics_config_dict`: Dictionary containing extrinsics calibration settings:
-        - `calculate_extrinsics` (bool): Whether to calculate extrinsic parameters.
-        - `extrinsics_method` (str): Calibration method ('board', 'scene', or 'keypoints').
-            - `board`: Uses a checkerboard/Charuco board laid on the floor (not recommended for accuracy).
-            - `scene`: Requires manual labeling of known 3D points in the scene.
-            - `keypoints`: Uses pose estimation of a moving subject in the scene (requires synchronized cameras).
-        - `moving_cameras` (bool): Placeholder for future functionality.
-        - `extrinsics_extension` (str): File format for input videos/images (e.g., 'mp4').
-        - `extrinsics_corners_nb` (list[int]): Number of corners [rows, cols] for the extrinsics board.
-        - `extrinsics_square_size` (float): Square size in mm (or dimensions for rectangular patterns).
-        - `object_coords_3d` (list[list[float]]): Known 3D coordinates in meters for the 'scene' method.
+    INPUTS:
+    - calib_dir: directory containing intrinsic and extrinsic folders, each populated with camera directories
+    - intrinsics_config_dict: dictionary of intrinsics parameters (overwrite_intrinsics, show_detection_intrinsics, intrinsics_extension, extract_every_N_sec, intrinsics_corners_nb, intrinsics_square_size, intrinsics_marker_size, intrinsics_aruco_dict)
+    - extrinsics_config_dict: dictionary of extrinsics parameters (calculate_extrinsics, show_detection_extrinsics, extrinsics_extension, extrinsics_corners_nb, extrinsics_square_size, extrinsics_marker_size, extrinsics_aruco_dict, object_coords_3d)
 
-    **Outputs:**
-    - `ret`: Residual reprojection error (list[float]) in pixels.
-    - `C`: List of camera names (list[str]).
-    - `S`: List of image sizes (list[list[float]]).
-    - `D`: List of distortion coefficients (list[np.array]).
-    - `K`: List of intrinsic matrices (list[np.array], 3x3).
-    - `R`: List of extrinsic rotations (list[np.array], Rodrigues vectors).
-    - `T`: List of extrinsic translations (list[np.array]).
-
-    **Configuration File Integration:**
-    The `.toml` configuration file defines two modes:
-    - `convert`: Converts calibration files from other software (e.g., Qualisys, OpenCap).
-    - `calculate`: Performs calibration based on images/videos of a calibration pattern.
-
-    Intrinsics:
-    - The method is specified (`charuco` or `chessboard`).
-    - Board dimensions (`intrinsics_corners_nb`) and square size (`intrinsics_square_size`) are used.
-    - Frame extraction frequency (`extract_every_N_sec`) is applied for videos.
-
-    Extrinsics:
-    - Methods (`board`, `scene`, or `keypoints`) determine how calibration is performed.
-    - For `scene`, 3D coordinates (`object_coords_3d`) must be provided.
-
-    Example:
-    - The function reads the configuration file and extracts relevant parameters for calibration.
-    - If existing calibration files are found and `overwrite_intrinsics` is `False`, the parameters are reused.
-    - Extrinsics are calculated only if `calculate_extrinsics` is `True`.
-
+    OUTPUTS:
+    - ret: residual reprojection error in _px_: list of floats
+    - C: camera name: list of strings
+    - S: image size: list of list of floats
+    - D: distorsion: list of arrays of floats
+    - K: intrinsic parameters: list of 3x3 arrays of floats
+    - R: extrinsic rotation: list of arrays of floats (Rodrigues)
+    - T: extrinsic translation: list of arrays of floats
     '''
-
-    # Retrieve parameters for intrinsics and extrinsics calibration
+    
     overwrite_intrinsics = intrinsics_config_dict.get('overwrite_intrinsics')
     calculate_extrinsics = extrinsics_config_dict.get('calculate_extrinsics')
 
-    # Attempt to retrieve existing calibration file if overwrite is disabled
+    # retrieve intrinsics if calib_file found and if overwrite_intrinsics=False
     try:
-        calib_file = glob.glob(os.path.join(calib_dir, f'Calib*.toml'))[0]  # Locate the calibration file
+        calib_file = glob.glob(os.path.join(calib_dir, f'Calib*.toml'))[0]
     except:
-        pass  # If no file found, continue to calculate intrinsics
-
+        pass
     if not overwrite_intrinsics and 'calib_file' in locals():
         logging.info(f'\nPreexisting calibration file found: \'{calib_file}\'.')
         logging.info(f'\nRetrieving intrinsic parameters from file. Set "overwrite_intrinsics" to true in Config.toml to recalculate them.')
-        
-        calib_data = toml.load(calib_file)  # Load calibration data from the TOML file
+        calib_file = glob.glob(os.path.join(calib_dir, f'Calib*.toml'))[0]
+        calib_data = toml.load(calib_file)
 
-        # Extract intrinsic parameters from the calibration file
+
         ret, C, S, D, K, R, T = [], [], [], [], [], [], []
         for cam in calib_data:
-            if cam != 'metadata':  # Skip metadata section
-                ret += [0.0]  # Placeholder for reprojection error
-                C += [calib_data[cam]['name']]  # Camera name
-                S += [calib_data[cam]['size']]  # Image size
-                K += [np.array(calib_data[cam]['matrix'])]  # Intrinsic matrix
-                D += [calib_data[cam]['distortions']]  # Distortion coefficients
-                R += [[0.0, 0.0, 0.0]]  # Placeholder for rotation
-                T += [[0.0, 0.0, 0.0]]  # Placeholder for translation
-        nb_cams_intrinsics = len(C)  # Count the number of cameras with intrinsics
+            if cam != 'metadata':
+                ret += [0.0]
+                C += [calib_data[cam]['name']]
+                S += [calib_data[cam]['size']]
+                K += [np.array(calib_data[cam]['matrix'])]
+                D += [calib_data[cam]['distortions']]
+                R += [[0.0, 0.0, 0.0]]
+                T += [[0.0, 0.0, 0.0]]
+        nb_cams_intrinsics = len(C)
+    # calculate intrinsics otherwise
     else:
-        # Calculate intrinsic parameters
         logging.info(f'\nCalculating intrinsic parameters...')
         ret, C, S, D, K, R, T = calibrate_intrinsics(calib_dir, intrinsics_config_dict)
-        nb_cams_intrinsics = len(C)  # Count the number of cameras with intrinsics
+        nb_cams_intrinsics = len(C)
 
-    # Calculate extrinsic parameters if enabled
+    # calculate extrinsics
     if calculate_extrinsics:
         logging.info(f'\nCalculating extrinsic parameters...')
         
-        # Verify consistency in the number of cameras for intrinsics and extrinsics
+        # check that the number of cameras is consistent
         nb_cams_extrinsics = len(next(os.walk(os.path.join(calib_dir, 'extrinsics')))[1])
         if nb_cams_intrinsics != nb_cams_extrinsics:
-            raise Exception(f'Error: The number of cameras is not consistent:\n'
-                            f'Found {nb_cams_intrinsics} cameras based on the number of intrinsic folders or on calibration file data,\n'
-                            f'and {nb_cams_extrinsics} cameras based on the number of extrinsic folders.')
-
-        # Perform extrinsics calibration
+            raise Exception(f'Error: The number of cameras is not consistent:\
+                    Found {nb_cams_intrinsics} cameras based on the number of intrinsic folders or on calibration file data,\
+                    and {nb_cams_extrinsics} cameras based on the number of extrinsic folders.')
         ret, C, S, D, K, R, T = calibrate_extrinsics(calib_dir, extrinsics_config_dict, C, S, K, D)
     else:
         logging.info(f'\nExtrinsic parameters won\'t be calculated. Set "calculate_extrinsics" to true in Config.toml to calculate them.')
 
     return ret, C, S, D, K, R, T
-
 
 
 def calibrate_intrinsics(calib_dir, intrinsics_config_dict):
@@ -915,128 +872,136 @@ def calibrate_extrinsics(calib_dir, extrinsics_config_dict, C, S, K, D):
     '''
     Calibrates extrinsic parameters
     from an image or the first frame of a video
-    of a checkerboard or measured clues on the scene.
+    of a checkerboard or of measured clues on the scene
 
     INPUTS:
     - calib_dir: directory containing intrinsic and extrinsic folders, each populated with camera directories
-    - extrinsics_config_dict: dictionary of extrinsics parameters:
-        - extrinsics_method: (str) method of calibration ('board', 'scene', or 'keypoints')
-        - calculate_extrinsics: (bool) flag to calculate extrinsics
-        - show_detection_extrinsics: (bool) show detected points for debugging
-        - extrinsics_extension: (str) file extension of input files ('mp4', 'png', etc.)
-        - extrinsics_corners_nb: (list[int]) number of corners [rows, cols]
-        - extrinsics_square_size: (float) size of squares in mm
-        - extrinsics_marker_size: (float) size of ArUco markers in mm
-        - extrinsics_aruco_dict: (str) dictionary type for ArUco markers
-        - object_coords_3d: (list[list[float]]) 3D coordinates of known points in the scene
+    - extrinsics_config_dict: dictionary of extrinsics parameters (extrinsics_method, calculate_extrinsics, show_detection_extrinsics, extrinsics_extension, extrinsics_corners_nb, extrinsics_square_size, extrinsics_marker_size, extrinsics_aruco_dict, object_coords_3d)
 
     OUTPUTS:
-    - ret: (list[float]) reprojection errors for extrinsics
-    - R: (list[np.ndarray]) extrinsic rotations (Rodrigues format)
-    - T: (list[np.ndarray]) extrinsic translations
+    - R: extrinsic rotation: list of arrays of floats (Rodrigues)
+    - T: extrinsic translation: list of arrays of floats
     '''
 
-    # Ensure the 'extrinsics' folder exists in the calibration directory
     try:
         extrinsics_cam_listdirs_names = next(os.walk(os.path.join(calib_dir, 'extrinsics')))[1]
     except StopIteration:
         logging.exception(f'Error: No {os.path.join(calib_dir, "extrinsics")} folder found.')
         raise Exception(f'Error: No {os.path.join(calib_dir, "extrinsics")} folder found.')
-
-    # Extract method of extrinsics calibration
+    
     extrinsics_method = extrinsics_config_dict.get('extrinsics_method')
     ret, R, T = [], [], []
-
-    # Handle board and scene calibration methods
+    
     if extrinsics_method in ('board', 'scene'):
-
+    
+                
         # Define 3D object points
         if extrinsics_method == 'board':
             extrinsics_corners_nb = extrinsics_config_dict.get('board').get('extrinsics_corners_nb')
-            extrinsics_square_size = extrinsics_config_dict.get('board').get('extrinsics_square_size') / 1000  # Convert to meters
+            extrinsics_square_size = extrinsics_config_dict.get('board').get('extrinsics_square_size') / 1000 # convert to meters
             object_coords_3d = np.zeros((extrinsics_corners_nb[0] * extrinsics_corners_nb[1], 3), np.float32)
             object_coords_3d[:, :2] = np.mgrid[0:extrinsics_corners_nb[0], 0:extrinsics_corners_nb[1]].T.reshape(-1, 2)
-            object_coords_3d[:, :2] *= extrinsics_square_size
+            object_coords_3d[:, :2] = object_coords_3d[:, 0:2] * extrinsics_square_size
         elif extrinsics_method == 'scene':
             object_coords_3d = np.array(extrinsics_config_dict.get('scene').get('object_coords_3d'), np.float32)
-
-        # Save reference 3D coordinates to a .trc file
-        calib_output_path = os.path.join(calib_dir, 'Object_points.trc')
+                
+        # Save reference 3D coordinates as trc
+        calib_output_path = os.path.join(calib_dir, f'Object_points.trc')
         trc_write(object_coords_3d, calib_output_path)
-
-        # Process each camera directory in 'extrinsics'
+    
         for i, cam in enumerate(extrinsics_cam_listdirs_names):
             logging.info(f'\nCamera {cam}:')
-
-            # Retrieve file extension and reprojection flag
-            extrinsics_extension = (extrinsics_config_dict.get('board').get('extrinsics_extension') 
-                                    if extrinsics_method == 'board' else 
-                                    extrinsics_config_dict.get('scene').get('extrinsics_extension'))
-            show_reprojection_error = (extrinsics_config_dict.get('board').get('show_reprojection_error') 
-                                       if extrinsics_method == 'board' else 
-                                       extrinsics_config_dict.get('scene').get('show_reprojection_error'))
-
-            # Get input image or video files
+            
+            # Read images or video
+            extrinsics_extension = [extrinsics_config_dict.get('board').get('extrinsics_extension') if extrinsics_method == 'board'
+                                    else extrinsics_config_dict.get('scene').get('extrinsics_extension')][0]
+            show_reprojection_error = [extrinsics_config_dict.get('board').get('show_reprojection_error') if extrinsics_method == 'board'
+                                    else extrinsics_config_dict.get('scene').get('show_reprojection_error')][0]
             img_vid_files = glob.glob(os.path.join(calib_dir, 'extrinsics', cam, f'*.{extrinsics_extension}'))
-            if not img_vid_files:
+            if len(img_vid_files) == 0:
                 logging.exception(f'The folder {os.path.join(calib_dir, "extrinsics", cam)} does not exist or does not contain any files with extension .{extrinsics_extension}.')
                 raise ValueError(f'The folder {os.path.join(calib_dir, "extrinsics", cam)} does not exist or does not contain any files with extension .{extrinsics_extension}.')
-            img_vid_files = sorted(img_vid_files, key=lambda c: [int(n) for n in re.findall(r'\d+', c)])
-
-            # Read the first image or extract the first frame from the video
+            img_vid_files = sorted(img_vid_files, key=lambda c: [int(n) for n in re.findall(r'\d+', c)]) #sorting paths with numbers
+            
+            # extract frames from image, or from video if imread is None
             img = cv2.imread(img_vid_files[0])
             if img is None:
                 cap = cv2.VideoCapture(img_vid_files[0])
-                _, img = cap.read()
+                res, img = cap.read()
+                if res == False:
+                    raise
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-            # Detect points based on the selected method
+            # Find corners or label by hand
             if extrinsics_method == 'board':
                 imgp, objp = findCorners(img_vid_files[0], extrinsics_corners_nb, objp=object_coords_3d, show=show_reprojection_error)
-                if not imgp:
-                    raise ValueError('No corners found. Try enabling "show_detection_extrinsics" or switching to "scene" method.')
+                if len(imgp) == 0:
+                    logging.exception('No corners found. Set "show_detection_extrinsics" to true to click corners by hand, or change extrinsic_board_type to "scene"')
+                    raise ValueError('No corners found. Set "show_detection_extrinsics" to true to click corners by hand, or change extrinsic_board_type to "scene"')
 
             elif extrinsics_method == 'scene':
                 imgp, objp = imgp_objp_visualizer_clicker(img, imgp=[], objp=object_coords_3d, img_path=img_vid_files[0])
-                if not imgp:
-                    raise ValueError('No points clicked. Ensure to click on image points corresponding to object_coords_3d.')
-
-            # Calculate extrinsics using PnP
+                if len(imgp) == 0:
+                    logging.exception('No points clicked (or fewer than 6). Press \'C\' when the image is displayed, and then click on the image points corresponding to the \'object_coords_3d\' you measured and wrote down in the Config.toml file.')
+                    raise ValueError('No points clicked (or fewer than 6). Press \'C\' when the image is displayed, and then click on the image points corresponding to the \'object_coords_3d\' you measured and wrote down in the Config.toml file.')
+                if len(objp) < 10:
+                    logging.info(f'Only {len(objp)} reference points for camera {cam}. Calibration of extrinsic parameters may not be accurate with fewer than 10 reference points, as spread out in the captured volume as possible.')
+            
+            elif extrinsics_method == 'keypoints':
+                logging.info('Calibration based on keypoints is not available yet.')
+            
+            # Calculate extrinsics
             mtx, dist = np.array(K[i]), np.array(D[i])
             _, r, t = cv2.solvePnP(np.array(objp), imgp, mtx, dist)
+            r, t = r.flatten(), t.flatten()
 
-            # Refine extrinsics
-            rvec_refined, tvec_refined = cv2.solvePnPRefineVVS(np.array(objp), imgp, mtx, dist, r, t)
-            r, t = rvec_refined.flatten(), tvec_refined.flatten()
+            # Projection of object points to image plane
+            # # Former way, distortions used to be ignored
+            # Kh_cam = np.block([mtx, np.zeros(3).reshape(3,1)])
+            # r_mat, _ = cv2.Rodrigues(r)
+            # H_cam = np.block([[r_mat,t.reshape(3,1)], [np.zeros(3), 1 ]])
+            # P_cam = Kh_cam @ H_cam
+            # proj_obj = [ ( P_cam[0] @ np.append(o, 1) /  (P_cam[2] @ np.append(o, 1)),  P_cam[1] @ np.append(o, 1) /  (P_cam[2] @ np.append(o, 1)) ) for o in objp]
+            proj_obj = np.squeeze(cv2.projectPoints(objp,r,t,mtx,dist)[0])
 
-            # Project object points to the image plane for verification
-            proj_obj = np.squeeze(cv2.projectPoints(objp, r, t, mtx, dist)[0])
-
-            # Visualize reprojection error
+            # Check calibration results
             if show_reprojection_error:
+                # Reopen image, otherwise 2 sets of text are overlaid
                 img = cv2.imread(img_vid_files[0])
+                if img is None:
+                    cap = cv2.VideoCapture(img_vid_files[0])
+                    res, img = cap.read()
+                    if res == False:
+                        raise
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
                 for o in proj_obj:
-                    center = (int(o[0]), int(o[1]))
-                    cv2.circle(img, center, 8, (0, 0, 255), -1)
+                    cv2.circle(img, (int(o[0]), int(o[1])), 8, (0,0,255), -1) 
                 for i in imgp:
-                    cv2.drawMarker(img, (int(i[0][0]), int(i[0][1])), (0, 255, 0), cv2.MARKER_CROSS, 15, 2)
-                cv2.imshow(f"Reprojection Error - Camera {cam}", img)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
+                    cv2.drawMarker(img, (int(i[0][0]), int(i[0][1])), (0,255,0), cv2.MARKER_CROSS, 15, 2)
+                cv2.putText(img, 'Verify calibration results, then close window.', (20, 20), cv2.FONT_HERSHEY_SIMPLEX, .7, (255,255,255), 7, lineType = cv2.LINE_AA)
+                cv2.putText(img, 'Verify calibration results, then close window.', (20, 20), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,0,0), 2, lineType = cv2.LINE_AA) 
+                cv2.drawMarker(img, (20,40), (0,255,0), cv2.MARKER_CROSS, 15, 2)
+                cv2.putText(img, '    Clicked points', (20, 40), cv2.FONT_HERSHEY_SIMPLEX, .7, (255,255,255), 7, lineType = cv2.LINE_AA)
+                cv2.putText(img, '    Clicked points', (20, 40), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,0,0), 2, lineType = cv2.LINE_AA)    
+                cv2.circle(img, (20,60), 8, (0,0,255), -1)    
+                cv2.putText(img, '    Reprojected object points', (20, 60), cv2.FONT_HERSHEY_SIMPLEX, .7, (255,255,255), 7, lineType = cv2.LINE_AA)
+                cv2.putText(img, '    Reprojected object points', (20, 60), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,0,0), 2, lineType = cv2.LINE_AA)    
+                im_pil = Image.fromarray(img)
+                im_pil.show(title = os.path.basename(img_vid_files[0]))
 
             # Calculate reprojection error
-            imgp_to_objreproj_dist = [np.linalg.norm(proj_obj[n] - imgp[n]) for n in range(len(proj_obj))]
-            rms_px = np.sqrt(np.mean(np.square(imgp_to_objreproj_dist)))
+            imgp_to_objreproj_dist = [euclidean_distance(proj_obj[n], imgp[n]) for n in range(len(proj_obj))]
+            rms_px = np.sqrt(np.sum([d**2 for d in imgp_to_objreproj_dist]))
             ret.append(rms_px)
             R.append(r)
             T.append(t)
-
+        
     elif extrinsics_method == 'keypoints':
-        raise NotImplementedError('Keypoints-based calibration is not yet implemented.')
-
+        raise NotImplementedError('This has not been integrated yet.')
+    
     else:
-        raise ValueError('Invalid value for extrinsics_method.')
+        raise ValueError('Wrong value for extrinsics_method')
 
     return ret, C, S, D, K, R, T
 

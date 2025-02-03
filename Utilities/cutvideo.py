@@ -10,7 +10,8 @@ import argparse
 
 def play_and_cut_videos_in_folder(folder_path):
     # Récupérer toutes les vidéos du dossier (filtrées par extension)
-    video_files = [f for f in os.listdir(folder_path) if f.lower().endswith('.mov')]
+    video_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.mp4', '.mov'))]
+
     if not video_files:
         print(f"Aucune video trouvee dans le dossier : {folder_path}")
         return
@@ -102,7 +103,7 @@ def play_and_select_frames(video_path):
         # Afficher la vidéo
         cv2.imshow("Video Player", resized_frame)
 
-        # Gérer les commandes clavier
+                # Gérer les commandes clavier
         key = cv2.waitKey(10) & 0xFF
 
         if key == ord('q'):  # Quitter
@@ -126,11 +127,11 @@ def play_and_select_frames(video_path):
                 return start_frame, end_frame, fps, frame_width, frame_height
             else:
                 print("Erreur : Selection invalide. Assurez-vous que les frames de debut et de fin sont definies et coherentes.")
-        elif key == 2555904:  # Flèche droite (avancer de 100 frames)
+        elif key == ord('d'):  # Flèche droite (avancer de 100 frames)
             current_frame = min(current_frame + 100, total_frames - 1)
             cap.set(cv2.CAP_PROP_POS_FRAMES, current_frame)
             print(f"Avance a la frame : {current_frame}")
-        elif key == 2424832:  # Flèche gauche (reculer de 100 frames)
+        elif key == ord('a'):  # Flèche gauche (reculer de 100 frames)
             current_frame = max(current_frame - 100, 0)
             cap.set(cv2.CAP_PROP_POS_FRAMES, current_frame)
             print(f"Recule a la frame : {current_frame}")
@@ -141,6 +142,7 @@ def play_and_select_frames(video_path):
             cap.release()
             cv2.destroyAllWindows()
             return None, None, None, None, None
+
 
     cap.release()
     cv2.destroyAllWindows()

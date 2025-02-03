@@ -753,6 +753,8 @@ def triangulate_all(config_dict):
     keypoints_names_swapped = [keypoint_name_swapped.replace('right', 'left') if keypoint_name_swapped.startswith('right') else keypoint_name_swapped.replace('left', 'right') if keypoint_name_swapped.startswith('left') else keypoint_name_swapped for keypoint_name_swapped in keypoints_names_swapped]
     keypoints_idx_swapped = [keypoints_names.index(keypoint_name_swapped) for keypoint_name_swapped in keypoints_names_swapped] # find index of new keypoint_name
     
+    
+    
     # 2d-pose files selection
     try:
         pose_listdirs_names = next(os.walk(pose_dir))[1]

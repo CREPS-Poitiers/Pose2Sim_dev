@@ -501,6 +501,7 @@ def calib_calc_fun(calib_dir, intrinsics_config_dict, extrinsics_config_dict):
         calib_file = glob.glob(os.path.join(calib_dir, f'Calib*.toml'))[0]
         calib_data = toml.load(calib_file)
 
+
         ret, C, S, D, K, R, T = [], [], [], [], [], [], []
         for cam in calib_data:
             if cam != 'metadata':
@@ -512,7 +513,6 @@ def calib_calc_fun(calib_dir, intrinsics_config_dict, extrinsics_config_dict):
                 R += [[0.0, 0.0, 0.0]]
                 T += [[0.0, 0.0, 0.0]]
         nb_cams_intrinsics = len(C)
-    
     # calculate intrinsics otherwise
     else:
         logging.info(f'\nCalculating intrinsic parameters...')
